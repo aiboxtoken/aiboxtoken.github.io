@@ -63,3 +63,10 @@ You can edit the Status cell manually in Google Sheets for v1.
 - GitHub Pages code is public. Keep all bot tokens and credentials in Apps Script Properties.
 - The included hidden honeypot field reduces basic bot spam. For higher traffic, add CAPTCHA/rate limiting in a later backend version.
 - Client-generated Order IDs are identifiers, not payment receipts. Confirm payment separately before starting paid work.
+
+
+## Current deployed Web App endpoint
+
+`https://script.google.com/macros/s/AKfycbzzO3R1GfaRIpL1Jd8LwkUqRi6M-j6Idn5ZBLeUzl36Ef37ZYOmX0BZmO1Ft7pdtsdk/exec`
+
+This URL is already configured in `config.js`.
