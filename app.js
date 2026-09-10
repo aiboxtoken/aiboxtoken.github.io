@@ -16,19 +16,73 @@ $$('.choose-package').forEach(btn=>btn.addEventListener('click',()=>{
   $('#start')?.scrollIntoView({behavior:'smooth'});
 }));
 
-// Brief generator
+// Live order submission + brief generator
 const form=$('#briefForm'),result=$('#result'),resultWrap=$('#resultWrap');
-form?.addEventListener('submit',e=>{
+const orderStatus=$('#orderStatus'),submitOrderBtn=$('#submitOrderBtn'),orderIdDisplay=$('#orderIdDisplay');
+
+function generateOrderId(){
+  const d=new Date();
+  const date=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  const rand=Math.random().toString(36).slice(2,8).toUpperCase();
+  return `ATL-${date}-${rand}`;
+}
+
+function buildOrderBrief(d,orderId){
+  return `AIBOX TOKEN LAUNCH — PROJECT ORDER\n================================\nOrder ID: ${orderId}\nStatus: NEW ORDER\nSubmitted: ${new Date().toLocaleString()}\n\nTOKEN / PROJECT\nProject / Token: ${d.get('name')}\nSymbol: ${String(d.get('symbol')||'').toUpperCase()}\nTotal Supply: ${d.get('supply')}\nDecimals: ${d.get('decimals')}\nProject Type: ${d.get('type')}\nSelected Package: ${d.get('package')}\n\nPROJECT GOAL\n${d.get('description')||'-'}\n\nLAUNCH DETAILS\nCountry: ${d.get('country')||'-'}\nExpected Launch Date: ${d.get('launchDate')||'-'}\nWebsite / Social: ${d.get('projectLinks')||'-'}\n\nCONTACT\nPreferred Contact: ${d.get('preferredContact')||'-'}\nTelegram / LINE / Phone: ${d.get('contact')||'-'}\nEmail: ${d.get('email')||'-'}\n\nSECURITY CONFIRMATION\nClient acknowledges: Never send a seed phrase, private key, wallet password or recovery phrase. Critical transactions should be signed from a client-controlled wallet.\n\nCOMMERCIAL NOTE\nThis submission is a project request, not payment confirmation. Final scope, timeline, liquidity capital, blockchain/network fees and third-party fees are confirmed separately before work begins.`;
+}
+
+function setOrderStatus(type,message){
+  if(!orderStatus)return;
+  orderStatus.className=`order-submit-status ${type||''}`.trim();
+  orderStatus.textContent=message;
+}
+
+form?.addEventListener('submit',async e=>{
   e.preventDefault();
+  if(submitOrderBtn?.disabled)return;
+  const cfg=window.AIBOX_CONFIG||{};
+  const endpoint=String(cfg.orderEndpoint||'').trim();
+  if(!endpoint || endpoint.includes('PASTE_GOOGLE_APPS_SCRIPT')){
+    setOrderStatus('error','Order system is not connected yet. The website owner must add the Google Apps Script Web App URL in config.js.');
+    return;
+  }
+
   const d=new FormData(form);
-  const brief=`AIBOX TOKEN LAUNCH — PROJECT BRIEF\n================================\nProject / Token: ${d.get('name')}\nSymbol: ${d.get('symbol')}\nTotal Supply: ${d.get('supply')}\nDecimals: ${d.get('decimals')}\nProject Type: ${d.get('type')}\nSelected Package: ${d.get('package')}\n\nPROJECT GOAL\n${d.get('description')||'-'}\n\nCONTACT\nTelegram / LINE: ${d.get('contact')||'-'}\nEmail: ${d.get('email')||'-'}\n\nSECURITY CONFIRMATION\nClient acknowledges: Never send seed phrase or private key. Critical transactions should be signed from a client-controlled wallet.\n\nNote: Liquidity capital, blockchain/network fees and third-party fees are separate unless specifically included in the agreed project scope.`;
-  result.value=brief; resultWrap.classList.remove('hidden');
-  resultWrap.scrollIntoView({behavior:'smooth',block:'nearest'});
+  if(String(d.get('company')||'').trim())return; // honeypot
+  const orderId=generateOrderId();
+  d.set('orderId',orderId);
+  d.set('symbol',String(d.get('symbol')||'').toUpperCase());
+  d.set('source',location.href);
+  d.set('userAgent',navigator.userAgent);
+
+  submitOrderBtn.disabled=true;
+  submitOrderBtn.textContent='Submitting Order…';
+  setOrderStatus('sending','Sending your project order securely…');
+
+  try{
+    // no-cors keeps GitHub Pages compatible with Google Apps Script redirects.
+    // The same client-generated Order ID is stored in Sheets and sent to Telegram.
+    await fetch(endpoint,{method:'POST',mode:'no-cors',body:new URLSearchParams([...d.entries()])});
+    const brief=buildOrderBrief(d,orderId);
+    result.value=brief;
+    if(orderIdDisplay)orderIdDisplay.textContent=orderId;
+    resultWrap.classList.remove('hidden');
+    setOrderStatus('success',`Order submitted. Your Order ID is ${orderId}.`);
+    resultWrap.scrollIntoView({behavior:'smooth',block:'nearest'});
+    const tg=$('#telegramContactBtn');
+    if(tg && cfg.supportTelegram){tg.href=cfg.supportTelegram;tg.classList.remove('hidden')}
+  }catch(err){
+    console.error(err);
+    setOrderStatus('error','We could not submit the order. Please check your connection and try again.');
+  }finally{
+    submitOrderBtn.disabled=false;
+    submitOrderBtn.textContent='Submit Project Order';
+  }
 });
 
 function toast(msg){const t=$('#toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
-$('#copyBtn')?.addEventListener('click',async()=>{if(!result.value)return;try{await navigator.clipboard.writeText(result.value);toast('Project brief copied')}catch{result.select();document.execCommand('copy');toast('Project brief copied')}});
-$('#downloadBtn')?.addEventListener('click',()=>{if(!result.value)return;const blob=new Blob([result.value],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='aibox-token-project-brief.txt';a.click();URL.revokeObjectURL(a.href)});
+$('#copyBtn')?.addEventListener('click',async()=>{if(!result.value)return;try{await navigator.clipboard.writeText(result.value);toast('Order brief copied')}catch{result.select();document.execCommand('copy');toast('Order brief copied')}});
+$('#downloadBtn')?.addEventListener('click',()=>{if(!result.value)return;const blob=new Blob([result.value],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);const m=(result.value.match(/Order ID: ([^\n]+)/)||[])[1]||'aibox-token-order';a.download=`${m}.txt`;a.click();URL.revokeObjectURL(a.href)});
 
 // Lightweight EN/TH language toggle
 const th={nav_services:'บริการ',nav_packages:'แพ็กเกจ',nav_process:'ขั้นตอน',nav_portfolio:'ผลงาน',nav_start:'เริ่มโปรเจกต์',eyebrow:'บริการเปิดตัวโทเคนบน SOLANA',hero_title:'จากไอเดียโทเคน สู่การเปิดตัวบนเชนแบบครบระบบ',hero_desc:'บริการเปิดตัวโทเคนแบบครบวงจรสำหรับธุรกิจ ครีเอเตอร์ และคอมมูนิตี้ ตั้งแต่การสร้างโทเคน Tokenomics, Liquidity, Vesting, เว็บไซต์, Swap และการสนับสนุนช่วงเปิดตัว',hero_package:'ดูแพ็กเกจ',hero_work:'ดูผลงาน',trust1:'ลูกค้าควบคุม Wallet เอง',trust2:'ไม่ขอ Seed Phrase',trust3:'มีข้อมูลอ้างอิงบนเชนโปร่งใส',services_label:'บริการครบวงจร',services_title:'ทีมเดียว ระบบเดียว พร้อมเปิดตัว',services_desc:'เราดูแลระบบเทคนิคของการเปิดตัว โดยให้ลูกค้าเป็นผู้ควบคุม Wallet และลงนามธุรกรรมสำคัญด้วยตนเอง',s1:'สร้างและตั้งค่า Token',s1d:'สร้าง SPL Token, Supply, Decimals, Metadata, Authority และเอกสารส่งมอบ',s2:'Tokenomics & Wallets',s2d:'วางโครงสร้าง Founder, Treasury, Community, Liquidity และ Vesting Wallet',s3:'Liquidity Launch',s3d:'เตรียม Raydium Pool วางราคาเริ่มต้น ขั้นตอนเพิ่ม Liquidity และ LP Lock',s4:'Vesting & Lock',s4d:'ตั้งค่า Vesting/Lock บนเชนพร้อมหลักฐานสาธารณะตรวจสอบได้',s5:'Launch Website',s5d:'เว็บไซต์ GitHub Pages ระดับพรีเมียม รองรับมือถือ ข้อมูลโครงการ และ UX พร้อมเชื่อม Wallet',s6:'Swap Integration',s6d:'วางระบบ Buy/Swap, เชื่อม Wallet และปรับ Flow สำหรับมือถือ',s7:'Transparency Center',s7d:'รวบรวม Mint, Pool, Lock, Vesting และข้อมูลสำคัญของโครงการไว้ในหน้าเดียว',s8:'Launch Support',s8d:'Launch checklist, เตรียมการมองเห็นบน DEX, ส่งข้อมูล Directory และดูแลหลังเปิดตัว',packages_label:'แพ็กเกจบริการ',packages_title:'เลือกระดับการเปิดตัวที่เหมาะกับโครงการ',packages_desc:'แพ็กเกจสำหรับโครงการที่ต้องการความเป็นมืออาชีพ ค่า Blockchain, เงิน Liquidity และบริการ third-party แยกต่างหาก',p1sub:'Professional Foundation',p1desc:'พื้นฐานครบสำหรับสร้างโทเคนที่น่าเชื่อถือและเตรียมพร้อมเข้าสู่ขั้นเปิดตัว',p1a:'สร้าง Solana SPL Token',p1b:'Metadata + Token Identity',p1c:'วางแผน Mint / Freeze Authority',p1d:'ให้คำปรึกษา Tokenomics',p1e:'โครงสร้าง Wallet Allocation',p1f:'เว็บไซต์ GitHub Launch แบบพื้นฐาน',p1g:'หน้า Transparency',p1h:'Final Launch Report',p2sub:'Market Ready',p2desc:'สำหรับโครงการที่ต้องการ Token + Market Setup + Transparency แบบครบถ้วน',p2a:'รวมทุกอย่างในแพ็กเกจ Launch',p2b:'ตั้งค่า Raydium Liquidity Pool',p2c:'วางแผนราคาเริ่มต้น / LP',p2d:'สนับสนุนการทำ LP Lock',p2e:'สนับสนุนการทำ Vesting',p2f:'เว็บไซต์ Premium แบบหลาย Section',p2g:'สนับสนุน DEX / Directory Submission',p2h:'Technical Support 30 วัน',p3sub:'Full Ecosystem Launch',p3desc:'แพ็กเกจเต็มสำหรับโครงการที่ต้องการโครงสร้างการเปิดตัวและประสบการณ์ผู้ใช้ที่ดีที่สุด',p3a:'รวมทุกอย่างในแพ็กเกจ Pro',p3b:'Advanced Tokenomics & Vesting Plan',p3c:'Custom Premium Launch Website',p3d:'Wallet Connect + Swap Integration',p3e:'ปรับ Mobile Wallet Flow',p3f:'Custom Transparency Dashboard',p3g:'Technical Setup สำหรับ Launch Campaign',p3h:'Technical Support 90 วัน',popular:'แนะนำ',choose_launch:'เลือก Launch',choose_pro:'เลือก Pro',choose_premium:'เลือก Premium',note_title:'หมายเหตุ:',note_text:'เงิน Liquidity, ค่า SOL/Network, ค่า Lock/Vesting third-party, Domain และค่าบริการแพลตฟอร์มภายนอกไม่รวมในแพ็กเกจ เว้นแต่ระบุไว้ใน Scope ที่ตกลงกัน',process_label:'ขั้นตอนการทำงาน',process_title:'จาก Brief ถึง Launch อย่างเป็นระบบ',step1:'Project Brief',step1d:'กำหนดวัตถุประสงค์ กลุ่มเป้าหมาย Supply Utility และ Scope',step2:'Structure & Tokenomics',step2d:'วาง Authorities, Allocation, Vesting, Liquidity และ Wallet Ownership',step3:'Build',step3d:'สร้าง Token, Metadata, Website, Transparency และ Integration',step4:'Review & Sign',step4d:'ลูกค้าตรวจสอบ Config และลงนามธุรกรรมสำคัญจาก Wallet ของตนเอง',step5:'Market Launch',step5d:'ดำเนินการ Liquidity และองค์ประกอบ Launch ตามแพ็กเกจ',step6:'Handover & Support',step6d:'ส่งมอบ Address, Transaction Reference, Source Code และเอกสารโครงการ',security_label:'ออกแบบโดยคำนึงถึงความปลอดภัย',security_title:'Wallet ของคุณ Key ของคุณ การอนุมัติของคุณ',security_desc:'เราออกแบบให้ลูกค้าควบคุม Wallet เอง และจะไม่ให้ลูกค้ากรอก Seed Phrase หรือ Private Key ลงในแบบฟอร์มเว็บไซต์',sec1:'ไม่เก็บ Seed Phrase',sec2:'ลูกค้าลงนามธุรกรรมเอง',sec3:'มีหลักฐาน On-chain สาธารณะ',portfolio_label:'ผลงานตัวอย่าง',portfolio_title:'พัฒนาจากประสบการณ์เปิดตัวจริง',portfolio_desc:'ตัวอย่างโครงการที่นำมาใช้พัฒนามาตรฐานการทำงานของเรา',aibox_desc:'แนวคิด Utility/Service Token เชื่อมกับระบบบริการบนเว็บไซต์ พร้อม Wallet UX และประสบการณ์การซื้อ Token',neneth_desc:'Community Token พร้อม Metadata, Raydium Liquidity, LP Lock, Vesting, Transparency Website และ Swap Integration',faq_title:'ก่อนเริ่มโครงการ',faq_desc:'ขอบเขตที่ชัดเจนช่วยให้ Launch แข็งแรงขึ้น',q1:'ต้องส่ง Seed Phrase หรือ Private Key ให้คุณหรือไม่?',a1:'ไม่ต้อง และไม่ควรส่งให้เรา ธุรกรรมสำคัญควรอนุมัติจาก Wallet ที่ลูกค้าควบคุมเอง',q2:'เงิน Liquidity รวมอยู่ในแพ็กเกจหรือไม่?',a2:'ไม่รวม เงิน Liquidity เป็นของเจ้าของโครงการ ค่า Network และ Third-party แยกต่างหาก เว้นแต่ระบุไว้ใน Scope',q3:'รับประกัน Listing ราคา หรือกำไรได้หรือไม่?',a3:'ไม่ได้ เราให้บริการด้านเทคนิคเท่านั้น ไม่รับประกัน Listing, ราคา, Volume หรือผลตอบแทน',q4:'เว็บไซต์ใช้ GitHub Pages ได้หรือไม่?',a4:'ได้ เว็บไซต์ Static Launch เหมาะกับ GitHub Pages และสามารถต่อ Custom Domain ภายหลังได้',q5:'ทำระบบ Buy/Swap บนเว็บได้หรือไม่?',a5:'ทำได้เมื่อเหมาะสมทางเทคนิค ความเข้ากันได้ของ Wallet และมือถือขึ้นกับ Integration และ Liquidity ของโครงการ',start_label:'เริ่มโครงการ',start_title:'ส่ง Token Brief ให้เรา',start_desc:'กรอกข้อมูลแล้วสร้าง Project Brief ได้ทันที แบบฟอร์มนี้ทำงานใน Browser และไม่ขอข้อมูลลับของ Wallet',mc1:'ชื่อ Token และ Symbol',mc2:'Supply และ Decimals',mc3:'Package และเป้าหมายโครงการ',mc4:'ช่องทางติดต่อ',f_name:'ชื่อ Token / Project',f_symbol:'Symbol',f_supply:'Total Supply',f_decimals:'Decimals',f_package:'Package',f_type:'ประเภทโครงการ',f_desc:'รายละเอียด / เป้าหมายโครงการ',f_confirm:'ฉันยืนยันว่าจะไม่ส่ง Seed Phrase หรือ Private Key ผ่านแบบฟอร์มนี้',generate:'สร้าง Project Brief',disclaimer_title:'ข้อจำกัดของบริการด้านเทคนิค',disclaimer:'AiBox Token Launch ให้บริการพัฒนาและสนับสนุนการเปิดตัวด้านเทคนิค ไม่ให้คำแนะนำการลงทุน ไม่รับประกัน Listing, ราคา Token, Liquidity, Volume หรือผลตอบแทน เจ้าของโครงการมีหน้าที่ตรวจสอบและปฏิบัติตามกฎหมายและข้อกำกับที่เกี่ยวข้อง',footer_desc:'โครงสร้างพื้นฐานสำหรับการเปิดตัว Solana Token ระดับพรีเมียม สำหรับครีเอเตอร์ คอมมูนิตี้ และธุรกิจ',footer_service:'บริการ',footer_start:'เริ่มต้น'};
