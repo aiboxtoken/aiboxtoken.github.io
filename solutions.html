@@ -1,18 +1,218 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Solutions | AiBox Tech Solutions</title><style>
-body{margin:0;font-family:Inter,Arial,sans-serif;background:#070a12;color:#f4f7fb;line-height:1.6}
-a{color:inherit}.wrap{max-width:1160px;margin:auto;padding:0 22px}.nav{padding:18px 0;border-bottom:1px solid #20293a;position:sticky;top:0;background:rgba(7,10,18,.94);z-index:10}
-.nav a{margin-right:18px;text-decoration:none;color:#c9d4e5}.hero{padding:64px 0}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}
-.hero img,.card img{width:100%;display:block}.hero img{border-radius:22px}.eyebrow{font-size:12px;letter-spacing:.18em;color:#57d8ff;font-weight:800}
-h1{font-size:64px;line-height:1;margin:10px 0 18px}h2{font-size:32px}.muted{color:#9aa7bb}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.card,.feature{background:#0d1321;border:1px solid #20293a;border-radius:20px;overflow:hidden}.pad,.feature{padding:20px}
-.btn{display:inline-block;padding:11px 16px;border-radius:10px;background:linear-gradient(90deg,#28c6ff,#766dff,#aa59ff);text-decoration:none;font-weight:800;margin-top:12px}
-.section{padding:48px 0}.how{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{padding:16px;border:1px solid #20293a;border-radius:14px;text-align:center}
-@media(max-width:900px){.hero-grid,.grid,.grid2,.how{grid-template-columns:1fr}h1{font-size:44px}}
-</style></head><body><div class="nav"><div class="wrap"><a href="index.html"><b>AiBox Tech Solutions</b></a><a href="solutions.html">Solutions</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="portfolio.html">Portfolio</a><a href="create-token.html">Start Project</a></div></div>
-<div class="wrap hero"><div class="hero-grid"><div><div class="eyebrow">AIBOX TECH SOLUTIONS</div><h1>One Platform.<br>Endless Possibilities.</h1><p class="muted">AI Agent, Cloud Service and Token Launch — designed to work independently or together around your business needs.</p><a class="btn" href="create-token.html">Start a Project</a></div><img src="assets/aibox-master.jpg"></div></div>
-<div class="wrap section"><div class="grid">
-<div class="card"><img src="assets/aibox-ai-agent.jpg"><div class="pad"><h2>AI Agent</h2><p class="muted">Customer support, lead capture, order handling, reporting and workflow automation.</p><a class="btn" href="ai-agent.html">Explore AI Agent</a></div></div>
-<div class="card"><img src="assets/aibox-cloud.jpg"><div class="pad"><h2>Cloud Service</h2><p class="muted">Storage, sync, backup, user access and private applications via browser and mobile.</p><a class="btn" href="cloud-service.html">Explore Cloud</a></div></div>
-<div class="card"><img src="assets/aibox-token-launch.jpg"><div class="pad"><h2>Token Launch</h2><p class="muted">Token setup, liquidity, DEX, transparency, website and community launch support.</p><a class="btn" href="token-launch.html">Explore Token Launch</a></div></div>
-</div><h2 style="margin-top:48px">How We Work</h2><div class="how"><div class="step">Understand</div><div class="step">Design</div><div class="step">Build</div><div class="step">Launch</div><div class="step">Support</div></div></div>
-</body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="AiBox Tech Solutions for automation, AI-powered content, cloud services and Web3."
+    />
+    <meta name="theme-color" content="#070a12" />
+    <title>Solutions | AiBox Tech Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .solutions-hero {
+        padding: 92px 0 48px;
+        text-align: center;
+      }
+      .solutions-hero h1 {
+        max-width: 900px;
+        margin: 14px auto 16px;
+        font-size: clamp(38px, 6vw, 72px);
+        line-height: 1.02;
+      }
+      .solutions-hero p {
+        max-width: 760px;
+        margin: 0 auto;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 17px;
+        line-height: 1.7;
+      }
+      .solution-showcase {
+        padding: 22px 0 90px;
+      }
+      .solution-gallery {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px;
+      }
+      .solution-card {
+        overflow: hidden;
+        border: 1px solid rgba(92, 195, 255, 0.2);
+        border-radius: 26px;
+        background: rgba(8, 13, 28, 0.86);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      }
+      .solution-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: #051225;
+      }
+      .solution-card-copy {
+        padding: 24px;
+      }
+      .solution-card-copy span {
+        color: #2ad8ff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+      }
+      .solution-card-copy h2 {
+        margin: 8px 0 10px;
+        font-size: clamp(23px, 3vw, 31px);
+      }
+      .solution-card-copy p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.64);
+        line-height: 1.65;
+      }
+      .solutions-cta {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+      @media (max-width: 860px) {
+        .solutions-hero {
+          padding-top: 66px;
+        }
+        .solution-gallery {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="nav-wrap">
+      <nav class="nav container">
+        <a class="brand" href="index.html">
+          <img
+            class="brand-logo"
+            src="assets/aibox-logo-icon.png"
+            alt="AiBox Tech Solutions logo"
+          />
+          <span>AiBox <b>Tech Solutions</b></span>
+        </a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+        <div class="nav-links" id="navLinks">
+          <a href="services.html">Services</a>
+          <a href="solutions.html" aria-current="page">Solutions</a>
+          <a href="packages.html">Packages</a>
+          <a href="process.html">Process</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="security.html">Security</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="nav-actions">
+          <a class="btn btn-small" href="contact.html">Contact Us</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="solutions-hero">
+        <div class="container">
+          <span class="eyebrow">AIBOX TECH SOLUTIONS</span>
+          <h1>Smart systems built for real business growth.</h1>
+          <p>
+            Explore practical AI and automation solutions that streamline
+            operations, improve customer engagement and create new opportunities
+            for your business.
+          </p>
+        </div>
+      </section>
+
+      <section class="solution-showcase">
+        <div class="container">
+          <div class="solution-gallery">
+            <article class="solution-card">
+              <img
+                src="assets/solution-live-token-order-en.png"
+                alt="Live Token Order System case study showing a five-step automated order workflow"
+                loading="eager"
+              />
+              <div class="solution-card-copy">
+                <span>CASE STUDY</span>
+                <h2>Live Token Order System</h2>
+                <p>
+                  A complete order workflow that saves customer data, alerts the
+                  team, sends confirmations and tracks every status
+                  automatically.
+                </p>
+              </div>
+            </article>
+
+            <article class="solution-card">
+              <img
+                src="assets/solution-fanpage-content-en.png"
+                alt="AiBox Fanpage and Content Management service overview"
+                loading="lazy"
+              />
+              <div class="solution-card-copy">
+                <span>AI-POWERED SERVICE</span>
+                <h2>Fanpage &amp; Content Management</h2>
+                <p>
+                  Strategy, content production, automated customer care and
+                  real-time performance reporting in one connected service.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="solutions-cta">
+            <a class="btn" href="contact.html">Start Your Project</a>
+            <a class="btn btn-ghost" href="services.html"
+              >Explore All Services</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-main">
+        <div class="footer-brand">
+          <a class="brand" href="index.html">
+            <img
+              class="brand-logo"
+              src="assets/aibox-logo-icon.png"
+              alt="AiBox Tech Solutions logo"
+            />
+            <span>AiBox <b>Tech Solutions</b></span>
+          </a>
+          <p>AI, Cloud, Web3 and digital solutions for real businesses.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="solutions.html">Solutions</a>
+          <a href="services.html">Services</a>
+          <a href="packages.html">Packages</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="process.html">Process</a>
+        </div>
+        <div>
+          <h4>Start</h4>
+          <a href="contact.html">Contact</a>
+          <a href="create-token.html">Project Brief</a>
+          <a href="terms.html">Terms &amp; Risk</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© 2026 AiBox Tech Solutions. All rights reserved.</span>
+        <span>Build • Automate • Launch</span>
+      </div>
+    </footer>
+
+    <div class="toast" id="toast">Copied</div>
+    <script src="app.js"></script>
+  </body>
+</html>
