@@ -235,8 +235,8 @@
             <h1>Let’s build the right solution for your business.</h1>
             <p>
               Tell us about your goals, current challenges and the service you
-              need. We will review your details and continue the conversation
-              directly through LINE.
+              need. Provide your email so our team can reply after reviewing
+              your request. LINE remains available for direct chat.
             </p>
             <a
               class="line-card"
@@ -266,6 +266,18 @@
               <div class="field">
                 <label for="company">Company or Brand</label>
                 <input id="company" name="company" type="text" />
+              </div>
+              <div class="field full">
+                <label for="email">Email Address *</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  inputmode="email"
+                  autocomplete="email"
+                  placeholder="name@example.com"
+                  required
+                />
               </div>
               <div class="field">
                 <label for="service">Service *</label>
@@ -300,6 +312,8 @@
                   required
                 ></textarea>
               </div>
+              <input id="sourcePage" name="page" type="hidden" />
+              <input id="submittedAt" name="submittedAt" type="hidden" />
             </div>
             <button class="btn" id="submitButton" type="submit">
               Submit Project Details
@@ -313,6 +327,12 @@
               We will contact you after reviewing your request.
             </p>
           </form>
+          <iframe
+            id="contactSubmitFrame"
+            name="contactSubmitFrame"
+            title="Contact form submission"
+            hidden
+          ></iframe>
         </div>
       </section>
     </main>
@@ -405,6 +425,7 @@
         .getElementById("contactForm")
         .addEventListener("submit", async function (event) {
           event.preventDefault();
+          const form = event.currentTarget;
           const endpoint = window.AIBOX_CONTACT_ENDPOINT;
           if (!endpoint || endpoint.includes("PASTE_")) {
             formStatus.textContent =
@@ -413,21 +434,22 @@
             return;
           }
 
-          const data = new FormData(event.currentTarget);
-          data.append("page", window.location.href);
-          data.append("submittedAt", new Date().toISOString());
+          document.getElementById("sourcePage").value = window.location.href;
+          document.getElementById("submittedAt").value =
+            new Date().toISOString();
           submitButton.disabled = true;
           submitButton.textContent = "Sending…";
           formStatus.textContent = "Sending your project details…";
           formStatus.style.color = "";
 
+          form.action = endpoint;
+          form.method = "POST";
+          form.target = "contactSubmitFrame";
+
           try {
-            await fetch(endpoint, {
-              method: "POST",
-              mode: "no-cors",
-              body: new URLSearchParams(data),
-            });
-            event.currentTarget.reset();
+            HTMLFormElement.prototype.submit.call(form);
+            await new Promise((resolve) => setTimeout(resolve, 1200));
+            form.reset();
             formStatus.textContent =
               "Thank you. Your project details have been sent successfully.";
             formStatus.style.color = "#35e983";
