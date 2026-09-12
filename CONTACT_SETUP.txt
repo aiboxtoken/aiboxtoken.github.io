@@ -1,0 +1,18 @@
+AIBOX DIRECT CONTACT FORM — ONE-TIME SETUP
+
+1. Create a new Google Sheet.
+2. Open Extensions > Apps Script.
+3. Paste the complete contents of google-apps-script.gs.
+4. In Apps Script, open Project Settings > Script Properties.
+5. Add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID.
+6. Select Deploy > New deployment > Web app.
+7. Execute as: Me.
+8. Who has access: Anyone.
+9. Copy the Web App URL.
+10. Open contact-config.js and replace:
+    PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE
+    with the Web App URL.
+11. Upload contact.html and contact-config.js to the website.
+
+Customers can then submit the form without opening LINE.
+The green LINE button remains available for customers who prefer direct chat.

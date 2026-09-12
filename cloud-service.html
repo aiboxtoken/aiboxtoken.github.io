@@ -1,11 +1,163 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cloud Service | AiBox Tech Solutions</title><style>
-body{margin:0;font-family:Inter,Arial,sans-serif;background:#070a12;color:#f4f7fb;line-height:1.6}
-a{color:inherit}.wrap{max-width:1160px;margin:auto;padding:0 22px}.nav{padding:18px 0;border-bottom:1px solid #20293a;position:sticky;top:0;background:rgba(7,10,18,.94);z-index:10}
-.nav a{margin-right:18px;text-decoration:none;color:#c9d4e5}.hero{padding:64px 0}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}
-.hero img,.card img{width:100%;display:block}.hero img{border-radius:22px}.eyebrow{font-size:12px;letter-spacing:.18em;color:#57d8ff;font-weight:800}
-h1{font-size:64px;line-height:1;margin:10px 0 18px}h2{font-size:32px}.muted{color:#9aa7bb}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.card,.feature{background:#0d1321;border:1px solid #20293a;border-radius:20px;overflow:hidden}.pad,.feature{padding:20px}
-.btn{display:inline-block;padding:11px 16px;border-radius:10px;background:linear-gradient(90deg,#28c6ff,#766dff,#aa59ff);text-decoration:none;font-weight:800;margin-top:12px}
-.section{padding:48px 0}.how{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{padding:16px;border:1px solid #20293a;border-radius:14px;text-align:center}
-@media(max-width:900px){.hero-grid,.grid,.grid2,.how{grid-template-columns:1fr}h1{font-size:44px}}
-</style></head><body><div class="nav"><div class="wrap"><a href="index.html"><b>AiBox Tech Solutions</b></a><a href="solutions.html">Solutions</a><a href="services.html">Services</a><a href="packages.html">Packages</a><a href="portfolio.html">Portfolio</a><a href="create-token.html">Start Project</a></div></div><div class="wrap hero"><div class="hero-grid"><div><div class="eyebrow">AIBOX CLOUD</div><h1>Your Data.<br>Your Control.</h1><p class="muted">Cloud storage, synchronization, backup and private applications for individuals, teams and businesses.</p><a class="btn" href="create-token.html">Talk to AiBox</a></div><img src="assets/aibox-cloud.jpg"></div></div><div class="wrap section"><div class="grid2"><div class="feature"><h2>Storage & Sync</h2><p class="muted">Access and synchronize files across devices.</p></div><div class="feature"><h2>Backup</h2><p class="muted">Protect important business and personal data.</p></div><div class="feature"><h2>User Access</h2><p class="muted">Separate accounts and permissions for teams.</p></div><div class="feature"><h2>Browser + Mobile</h2><p class="muted">Access supported services from anywhere.</p></div></div></div></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Secure storage, synchronization, backup and private services accessible through browser and supported mobile applications."
+    />
+    <meta name="theme-color" content="#070a12" />
+    <title>Cloud Service | AiBox Tech Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .page-hero {
+        padding: 92px 0 44px;
+        text-align: center;
+      }
+      .page-hero h1 {
+        max-width: 920px;
+        margin: 14px auto 16px;
+        font-size: clamp(38px, 6vw, 70px);
+        line-height: 1.04;
+      }
+      .page-hero p {
+        max-width: 780px;
+        margin: 0 auto;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 17px;
+        line-height: 1.7;
+      }
+      .page-grid {
+        padding: 18px 0 92px;
+      }
+      .page-grid .service-grid {
+        align-items: stretch;
+      }
+      .service-card h2 {
+        font-size: 23px;
+      }
+      .service-card p {
+        min-height: 76px;
+      }
+      .service-card .btn {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="nav-wrap">
+      <nav class="nav container">
+        <a class="brand" href="index.html"
+          ><img
+            class="brand-logo"
+            src="assets/aibox-logo-icon.png"
+            alt="AiBox Tech Solutions logo"
+          /><span>AiBox <b>Tech Solutions</b></span></a
+        >
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+        <div class="nav-links" id="navLinks">
+          <a href="services.html">Services</a
+          ><a href="solutions.html">Solutions</a
+          ><a href="packages.html">Packages</a><a href="process.html">Process</a
+          ><a href="portfolio.html">Portfolio</a
+          ><a href="security.html">Security</a><a href="faq.html">FAQ</a>
+        </div>
+        <div class="nav-actions">
+          <a class="btn btn-small" href="contact.html">Contact Us</a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <span class="eyebrow">PRIVATE CLOUD SERVICE</span>
+          <h1>
+            Your business files and applications, available wherever you work.
+          </h1>
+          <p>
+            Secure storage, synchronization, backup and private services
+            accessible through browser and supported mobile applications.
+          </p>
+        </div>
+      </section>
+      <section class="page-grid">
+        <div class="container">
+          <div class="service-grid">
+            <article class="service-card">
+              <h2>Secure Storage</h2>
+              <p>Organize business files with controlled user access.</p>
+              <a class="btn btn-small btn-outline" href="contact.html"
+                >Learn More</a
+              >
+            </article>
+            <article class="service-card">
+              <h2>Automatic Sync</h2>
+              <p>Keep approved devices and folders synchronized.</p>
+              <a class="btn btn-small btn-outline" href="contact.html"
+                >Learn More</a
+              >
+            </article>
+            <article class="service-card">
+              <h2>Backup Planning</h2>
+              <p>Reduce the risk of losing important business data.</p>
+              <a class="btn btn-small btn-outline" href="contact.html"
+                >Learn More</a
+              >
+            </article>
+            <article class="service-card">
+              <h2>Browser & Mobile Access</h2>
+              <p>Use supported services without being tied to one computer.</p>
+              <a class="btn btn-small btn-outline" href="contact.html"
+                >Learn More</a
+              >
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="container footer-main">
+        <div class="footer-brand">
+          <a class="brand" href="index.html"
+            ><img
+              class="brand-logo"
+              src="assets/aibox-logo-icon.png"
+              alt="AiBox Tech Solutions logo"
+            /><span>AiBox <b>Tech Solutions</b></span></a
+          >
+          <p>AI, Cloud, Web3 and digital solutions for real businesses.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="solutions.html">Solutions</a
+          ><a href="services.html">Services</a
+          ><a href="packages.html">Packages</a
+          ><a href="portfolio.html">Portfolio</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a
+            href="https://line.me/R/ti/p/%40544tyfsq"
+            target="_blank"
+            rel="noopener noreferrer"
+            >LINE OA @544tyfsq</a
+          ><a href="contact.html">Send Project Details</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© 2026 AiBox Tech Solutions. All rights reserved.</span
+        ><span>Build • Automate • Launch</span>
+      </div>
+    </footer>
+    <script src="app.js"></script>
+    <script src="contact-widget.js"></script>
+  </body>
+</html>
