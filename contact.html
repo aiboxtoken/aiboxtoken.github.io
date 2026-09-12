@@ -254,7 +254,10 @@
 
           <form class="contact-form" id="contactForm">
             <h2>Send Project Details</h2>
-            <p>Complete the form and continue securely in LINE.</p>
+            <p>
+              Complete the form once. Your details will be sent directly to the
+              AiBox team without opening another app.
+            </p>
             <div class="form-grid">
               <div class="field">
                 <label for="name">Name *</label>
@@ -298,10 +301,16 @@
                 ></textarea>
               </div>
             </div>
-            <button class="btn" type="submit">Send Details via LINE</button>
-            <p class="form-note">
-              Your information stays on your device until you choose to send it
-              in LINE.
+            <button class="btn" id="submitButton" type="submit">
+              Submit Project Details
+            </button>
+            <p
+              class="form-note"
+              id="formStatus"
+              role="status"
+              aria-live="polite"
+            >
+              We will contact you after reviewing your request.
             </p>
           </form>
         </div>
@@ -374,26 +383,62 @@
     </a>
 
     <script>
+      window.AIBOX_CONTACT_ENDPOINT =
+        "https://script.google.com/macros/s/AKfycbxBeiHMhyMlQkI6QYEULsDI9so0oqC4lal77IkZ9yZ9djUkEfKZzUVvzxC4DOaop6aq/exec";
+
+      const contactForm = document.getElementById("contactForm");
+      const submitButton = document.getElementById("submitButton");
+      const formStatus = document.getElementById("formStatus");
+      const requestedService = new URLSearchParams(window.location.search).get(
+        "service",
+      );
+
+      if (requestedService) {
+        const serviceSelect = document.getElementById("service");
+        const matchingOption = Array.from(serviceSelect.options).find(
+          (option) => option.text === requestedService,
+        );
+        if (matchingOption) serviceSelect.value = matchingOption.value;
+      }
+
       document
         .getElementById("contactForm")
-        .addEventListener("submit", function (event) {
+        .addEventListener("submit", async function (event) {
           event.preventDefault();
+          const endpoint = window.AIBOX_CONTACT_ENDPOINT;
+          if (!endpoint || endpoint.includes("PASTE_")) {
+            formStatus.textContent =
+              "The direct-send connection is not configured yet. Please contact us using the green LINE button.";
+            formStatus.style.color = "#ffb84d";
+            return;
+          }
+
           const data = new FormData(event.currentTarget);
-          const lines = [
-            "Hello AiBox Tech Solutions,",
-            "",
-            "Name: " + data.get("name"),
-            "Company / Brand: " + (data.get("company") || "-"),
-            "Service: " + data.get("service"),
-            "Estimated Budget: " + (data.get("budget") || "Not specified"),
-            "",
-            "Project Details:",
-            data.get("message"),
-          ];
-          const url =
-            "https://line.me/R/oaMessage/%40544tyfsq/?" +
-            encodeURIComponent(lines.join("\n"));
-          window.open(url, "_blank", "noopener,noreferrer");
+          data.append("page", window.location.href);
+          data.append("submittedAt", new Date().toISOString());
+          submitButton.disabled = true;
+          submitButton.textContent = "Sending…";
+          formStatus.textContent = "Sending your project details…";
+          formStatus.style.color = "";
+
+          try {
+            await fetch(endpoint, {
+              method: "POST",
+              mode: "no-cors",
+              body: new URLSearchParams(data),
+            });
+            event.currentTarget.reset();
+            formStatus.textContent =
+              "Thank you. Your project details have been sent successfully.";
+            formStatus.style.color = "#35e983";
+          } catch (error) {
+            formStatus.textContent =
+              "We could not send your details. Please try again or use the green LINE button.";
+            formStatus.style.color = "#ff6b6b";
+          } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Project Details";
+          }
         });
     </script>
     <script src="app.js"></script>
