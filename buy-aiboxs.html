@@ -1,0 +1,977 @@
+<!doctype html>
+<!-- AiBox Tech Solutions — Rev.13 -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Buy AiBoxs Token with SOL directly from the AiBox Tech Solutions website using your own Solana wallet."
+    />
+    <meta name="theme-color" content="#070a12" />
+    <meta name="aibox-revision" content="Rev.13" />
+    <title>Buy AiBoxs Token | AiBox Tech Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      .buy-page {
+        padding: 78px 0 96px;
+      }
+      .buy-intro {
+        max-width: 820px;
+        margin: 0 auto 34px;
+        text-align: center;
+      }
+      .buy-intro h1 {
+        margin: 12px 0 14px;
+        font-size: clamp(38px, 6vw, 68px);
+        line-height: 1.04;
+      }
+      .buy-intro p {
+        max-width: 720px;
+        margin: 0 auto;
+        color: rgba(255, 255, 255, 0.66);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+      .buy-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 0.82fr) minmax(360px, 1.18fr);
+        gap: 24px;
+        align-items: start;
+      }
+      .buy-card,
+      .buy-info-card {
+        border: 1px solid rgba(122, 116, 255, 0.26);
+        border-radius: 24px;
+        background:
+          linear-gradient(145deg, rgba(15, 21, 40, 0.96), rgba(8, 11, 23, 0.96));
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.3);
+      }
+      .buy-info-card {
+        padding: 30px;
+      }
+      .token-heading {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .token-heading img {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        border-radius: 17px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+      }
+      .token-heading span,
+      .mini-label {
+        display: block;
+        color: #68d8ff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .token-heading h2 {
+        margin: 4px 0 0;
+        font-size: 27px;
+      }
+      .token-facts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 22px 0;
+      }
+      .token-fact {
+        padding: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.025);
+      }
+      .token-fact strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 15px;
+      }
+      .mint-box {
+        padding: 15px;
+        border: 1px solid rgba(87, 201, 255, 0.2);
+        border-radius: 16px;
+        background: rgba(24, 118, 186, 0.08);
+      }
+      .mint-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .mint-row code {
+        min-width: 0;
+        overflow: hidden;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 12px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .copy-button {
+        flex: 0 0 auto;
+        padding: 8px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+        cursor: pointer;
+        font: 700 12px/1 Inter, sans-serif;
+      }
+      .how-list {
+        display: grid;
+        gap: 13px;
+        margin: 25px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .how-list li {
+        display: grid;
+        grid-template-columns: 30px 1fr;
+        gap: 11px;
+        align-items: start;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .how-list b {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        place-items: center;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #52d9ff, #7757ff);
+        color: #fff;
+        font-size: 12px;
+      }
+      .buy-card {
+        padding: 28px;
+      }
+      .wallet-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+      .buy-card select,
+      .buy-card input {
+        width: 100%;
+        min-height: 52px;
+        padding: 0 15px;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 14px;
+        outline: 0;
+        background: rgba(255, 255, 255, 0.055);
+        color: #fff;
+        font: 600 14px/1 Inter, sans-serif;
+      }
+      .buy-card select:focus,
+      .buy-card input:focus {
+        border-color: rgba(87, 210, 255, 0.75);
+        box-shadow: 0 0 0 3px rgba(87, 210, 255, 0.1);
+      }
+      .buy-card option {
+        background: #11172a;
+        color: #fff;
+      }
+      .wallet-address {
+        margin: -10px 0 22px;
+        color: #63dcff;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+      .field-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 18px 0 9px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .field-label small {
+        color: rgba(255, 255, 255, 0.42);
+        font-weight: 500;
+      }
+      .preset-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 9px;
+      }
+      .preset {
+        min-height: 48px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff;
+        cursor: pointer;
+        font: 800 14px/1 Inter, sans-serif;
+      }
+      .preset:hover,
+      .preset.active {
+        border-color: rgba(84, 213, 255, 0.7);
+        background: linear-gradient(145deg, rgba(48, 181, 255, 0.2), rgba(113, 73, 255, 0.2));
+      }
+      .custom-wrap {
+        position: relative;
+        margin-top: 10px;
+      }
+      .custom-wrap span {
+        position: absolute;
+        top: 50%;
+        left: 15px;
+        transform: translateY(-50%);
+        color: #6cdcff;
+        font-weight: 800;
+      }
+      .custom-wrap input {
+        padding-left: 33px;
+      }
+      .quote-box {
+        display: grid;
+        gap: 10px;
+        margin: 22px 0;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 17px;
+        background: rgba(0, 0, 0, 0.18);
+      }
+      .quote-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 13px;
+      }
+      .quote-row strong {
+        color: #fff;
+        text-align: right;
+      }
+      .quote-row.total {
+        margin-top: 3px;
+        padding-top: 13px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 15px;
+      }
+      .quote-row.total strong {
+        color: #6bdeff;
+        font-size: 18px;
+      }
+      .agree-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        align-items: start;
+        margin: 18px 0;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        line-height: 1.55;
+      }
+      .agree-row input {
+        width: 17px;
+        min-height: 17px;
+        margin-top: 2px;
+        padding: 0;
+        accent-color: #5ad8ff;
+      }
+      .agree-row a {
+        color: #67dbff;
+      }
+      .buy-button {
+        width: 100%;
+        min-height: 56px;
+        border: 0;
+        border-radius: 15px;
+        background: linear-gradient(100deg, #49d9ff, #7465ff 58%, #a64aff);
+        color: #fff;
+        cursor: pointer;
+        font: 900 15px/1 Inter, sans-serif;
+        box-shadow: 0 16px 36px rgba(88, 102, 255, 0.25);
+      }
+      .buy-button:disabled,
+      .connect-button:disabled {
+        cursor: not-allowed;
+        filter: grayscale(0.35);
+        opacity: 0.5;
+      }
+      .connect-button {
+        min-width: 142px;
+        min-height: 52px;
+        border: 0;
+        border-radius: 14px;
+        background: linear-gradient(100deg, #42d7ff, #7860ff);
+        color: #fff;
+        cursor: pointer;
+        font: 800 13px/1 Inter, sans-serif;
+      }
+      .status-box {
+        display: none;
+        margin-top: 15px;
+        padding: 13px 14px;
+        border-radius: 13px;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      .status-box.show {
+        display: block;
+      }
+      .status-box.info {
+        border: 1px solid rgba(88, 201, 255, 0.22);
+        background: rgba(40, 153, 222, 0.1);
+        color: #a6e9ff;
+      }
+      .status-box.success {
+        border: 1px solid rgba(52, 232, 132, 0.25);
+        background: rgba(42, 188, 107, 0.1);
+        color: #70f0aa;
+      }
+      .status-box.error {
+        border: 1px solid rgba(255, 100, 113, 0.25);
+        background: rgba(211, 55, 74, 0.1);
+        color: #ff9aa5;
+      }
+      .status-box a {
+        color: inherit;
+        font-weight: 800;
+      }
+      .trade-note {
+        margin: 15px 0 0;
+        color: rgba(255, 255, 255, 0.42);
+        font-size: 11px;
+        line-height: 1.55;
+        text-align: center;
+      }
+      .line-contact-float {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 999;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        min-height: 52px;
+        padding: 0 18px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 999px;
+        background: #06c755;
+        color: #fff;
+        font: 800 14px/1 Inter, sans-serif;
+        text-decoration: none;
+        box-shadow: 0 14px 34px rgba(6, 199, 85, 0.32);
+      }
+      .line-contact-float svg {
+        width: 25px;
+        height: 25px;
+      }
+      @media (max-width: 900px) {
+        .buy-shell {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .buy-page {
+          padding: 54px 0 80px;
+        }
+        .buy-card,
+        .buy-info-card {
+          padding: 20px;
+          border-radius: 19px;
+        }
+        .wallet-row {
+          grid-template-columns: 1fr;
+        }
+        .connect-button {
+          width: 100%;
+        }
+        .preset-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .token-facts {
+          grid-template-columns: 1fr;
+        }
+        .line-contact-float {
+          right: 14px;
+          bottom: 14px;
+          min-height: 48px;
+          padding: 0 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="nav-wrap">
+      <nav class="nav container">
+        <a class="brand" href="index.html">
+          <img
+            class="brand-logo"
+            src="assets/aibox-logo-icon.png"
+            alt="AiBox Tech Solutions logo"
+          />
+          <span>AiBox <b>Tech Solutions</b></span>
+        </a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+        <div class="nav-links" id="navLinks">
+          <a href="services.html">Services</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="packages.html">Packages</a>
+          <a href="process.html">Process</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="security.html">Security</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="nav-actions">
+          <a class="btn btn-small" href="contact.html">Contact Us</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="buy-page">
+      <div class="container">
+        <section class="buy-intro">
+          <span class="eyebrow">AIBOXS UTILITY TOKEN</span>
+          <h1>Buy AiBoxs directly with SOL.</h1>
+          <p>
+            Connect your own Solana wallet, choose an amount and approve the
+            transaction securely. AiBox never receives your seed phrase or
+            private key.
+          </p>
+        </section>
+
+        <div class="buy-shell">
+          <aside class="buy-info-card">
+            <div class="token-heading">
+              <img src="assets/aiboxs-token-logo.png" alt="AiBoxs Token logo" />
+              <div>
+                <span>Solana Utility Token</span>
+                <h2>AiBoxs Token</h2>
+              </div>
+            </div>
+
+            <p style="color: rgba(255, 255, 255, 0.65); line-height: 1.65">
+              Use AiBoxs Token for eligible AiBox Tech Solutions services and
+              receive a 30% discount on our service fees. Terms apply.
+            </p>
+
+            <div class="token-facts">
+              <div class="token-fact">
+                <span class="mini-label">Network</span>
+                <strong>Solana Mainnet</strong>
+              </div>
+              <div class="token-fact">
+                <span class="mini-label">Trading Route</span>
+                <strong id="routeLabel">Pump.fun Bonding Curve</strong>
+              </div>
+            </div>
+
+            <div class="mint-box">
+              <span class="mini-label">Official Mint Address</span>
+              <div class="mint-row">
+                <code id="mintText"
+                  >5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump</code
+                >
+                <button class="copy-button" id="copyMint" type="button">
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <ul class="how-list">
+              <li><b>1</b><span>Connect a supported Solana wallet.</span></li>
+              <li><b>2</b><span>Choose how much you want to spend in USD.</span></li>
+              <li><b>3</b><span>Review the estimate and approve in your wallet.</span></li>
+              <li><b>4</b><span>Verify the completed purchase on Solscan.</span></li>
+            </ul>
+          </aside>
+
+          <section class="buy-card" aria-labelledby="tradeTitle">
+            <span class="mini-label">NON-CUSTODIAL PURCHASE</span>
+            <h2 id="tradeTitle" style="margin: 7px 0 22px; font-size: 27px">
+              Buy AiBoxs
+            </h2>
+
+            <div class="wallet-row">
+              <select id="walletType" aria-label="Select wallet">
+                <option value="auto">Auto-detect Wallet</option>
+                <option value="phantom">Phantom</option>
+                <option value="solflare">Solflare</option>
+                <option value="backpack">Backpack</option>
+                <option value="bitget">Bitget Wallet</option>
+              </select>
+              <button class="connect-button" id="connectWallet" type="button">
+                Connect Wallet
+              </button>
+            </div>
+            <div class="wallet-address" id="walletAddress">
+              No wallet connected
+            </div>
+
+            <label class="field-label" for="buyerEmail">
+              <span>Email for purchase record</span><small>Required</small>
+            </label>
+            <input
+              id="buyerEmail"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="name@example.com"
+              required
+            />
+
+            <div class="field-label">
+              <span>Amount to spend</span><small>Displayed in USD</small>
+            </div>
+            <div class="preset-grid" aria-label="Purchase amount">
+              <button class="preset active" type="button" data-usd="0.99">$0.99</button>
+              <button class="preset" type="button" data-usd="1.99">$1.99</button>
+              <button class="preset" type="button" data-usd="4.99">$4.99</button>
+              <button class="preset" type="button" data-usd="custom">Custom</button>
+            </div>
+            <div class="custom-wrap">
+              <span>$</span>
+              <input
+                id="customAmount"
+                type="number"
+                min="0.5"
+                step="0.01"
+                value="0.99"
+                aria-label="Custom USD amount"
+              />
+            </div>
+
+            <div class="quote-box" aria-live="polite">
+              <div class="quote-row">
+                <span>Reference SOL price</span><strong id="solPrice">Loading…</strong>
+              </div>
+              <div class="quote-row">
+                <span>You pay</span><strong id="solAmount">— SOL</strong>
+              </div>
+              <div class="quote-row total">
+                <span>Estimated receive</span><strong id="tokenEstimate">— AiBoxs</strong>
+              </div>
+              <div class="quote-row">
+                <span>Slippage limit</span><strong>10%</strong>
+              </div>
+            </div>
+
+            <label class="agree-row">
+              <input id="acceptTerms" type="checkbox" />
+              <span>
+                I understand that AiBoxs is a utility token, the final amount is
+                determined by the live bonding curve, transactions cannot be
+                reversed, and this is not a promise of investment returns. I
+                accept the <a href="terms.html">Terms &amp; Risk</a>.
+              </span>
+            </label>
+
+            <button class="buy-button" id="buyButton" type="button" disabled>
+              Connect Wallet to Buy
+            </button>
+            <div class="status-box" id="tradeStatus" role="status" aria-live="polite"></div>
+            <p class="trade-note">
+              Keep at least 0.01 SOL in your wallet for network fees and account
+              creation. Price and token output are estimates until you approve
+              the transaction. Trade construction is provided by PumpPortal, a
+              third-party Pump.fun API.
+            </p>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container footer-main">
+        <div class="footer-brand">
+          <a class="brand" href="index.html">
+            <img
+              class="brand-logo"
+              src="assets/aibox-logo-icon.png"
+              alt="AiBox Tech Solutions logo"
+            />
+            <span>AiBox <b>Tech Solutions</b></span>
+          </a>
+          <p>Intelligent digital infrastructure powered by AI, Cloud, Automation and Web3.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="solutions.html">Solutions</a>
+          <a href="services.html">Services</a>
+          <a href="packages.html">Packages</a>
+          <a href="portfolio.html">Portfolio</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="https://line.me/R/ti/p/%40544tyfsq" target="_blank" rel="noopener noreferrer">LINE OA @544tyfsq</a>
+          <a href="contact.html">Send Project Details</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© 2026 AiBox Tech Solutions. All rights reserved.</span>
+        <span>Build • Automate • Launch</span>
+      </div>
+    </footer>
+
+    <a
+      class="line-contact-float"
+      href="https://line.me/R/ti/p/%40544tyfsq"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with AiBox Tech Solutions on LINE"
+    >
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <circle cx="18" cy="18" r="18" fill="#fff" />
+        <path fill="#06c755" d="M29.8 16.8c0-5.3-5.3-9.6-11.8-9.6S6.2 11.5 6.2 16.8c0 4.8 4.3 8.8 10.1 9.5.4.1.9.3 1 .7.1.4.1.9 0 1.3l-.2 1.2c-.1.4-.3 1.5 1.3.8 1.6-.7 8.7-5.1 11.8-8.8 2.1-2.3 3-4.7 3-4.7h-3.4Z" />
+        <text x="18" y="20.7" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">LINE</text>
+      </svg>
+      Chat on LINE
+    </a>
+
+    <iframe id="purchaseLogFrame" name="purchaseLogFrame" title="Purchase record submission" hidden></iframe>
+    <script src="https://unpkg.com/@solana/web3.js@1.98.4/lib/index.iife.min.js" crossorigin="anonymous"></script>
+    <script>
+      (() => {
+        "use strict";
+
+        const MINT = "5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump";
+        const PUMP_COIN_API = `https://frontend-api-v3.pump.fun/coins/${MINT}`;
+        const TRADE_API = "https://pumpportal.fun/api/trade-local";
+        const RPC_ENDPOINT = "https://api.mainnet-beta.solana.com";
+        const CONTACT_ENDPOINT =
+          "https://script.google.com/macros/s/AKfycbxBeiHMhyMlQkI6QYEULsDI9so0oqC4lal77IkZ9yZ9djUkEfKZzUVvzxC4DOaop6aq/exec";
+        const SLIPPAGE = 10;
+        const PRIORITY_FEE_SOL = 0.0001;
+        const RESERVED_SOL = 0.01;
+        const TOTAL_SUPPLY_TOKENS = 1_000_000_000;
+
+        const connection = new solanaWeb3.Connection(RPC_ENDPOINT, "confirmed");
+        const walletType = document.getElementById("walletType");
+        const connectButton = document.getElementById("connectWallet");
+        const buyButton = document.getElementById("buyButton");
+        const walletAddress = document.getElementById("walletAddress");
+        const buyerEmail = document.getElementById("buyerEmail");
+        const customAmount = document.getElementById("customAmount");
+        const acceptTerms = document.getElementById("acceptTerms");
+        const solPriceText = document.getElementById("solPrice");
+        const solAmountText = document.getElementById("solAmount");
+        const tokenEstimateText = document.getElementById("tokenEstimate");
+        const statusBox = document.getElementById("tradeStatus");
+        const routeLabel = document.getElementById("routeLabel");
+
+        let provider = null;
+        let publicKey = null;
+        let selectedUsd = 0.99;
+        let solUsd = 0;
+        let tokenUsd = 0;
+        let quoteReady = false;
+        let busy = false;
+
+        function providerMap() {
+          return {
+            phantom: window.phantom?.solana,
+            solflare: window.solflare,
+            backpack: window.backpack,
+            bitget: window.bitkeep?.solana || window.bitgetWallet?.solana,
+          };
+        }
+
+        function getProvider(type) {
+          const wallets = providerMap();
+          if (type !== "auto") return wallets[type] || null;
+          return (
+            (wallets.phantom?.isPhantom && wallets.phantom) ||
+            wallets.solflare ||
+            wallets.backpack ||
+            wallets.bitget ||
+            window.solana ||
+            null
+          );
+        }
+
+        function shortAddress(value) {
+          return `${value.slice(0, 5)}…${value.slice(-5)}`;
+        }
+
+        function setStatus(type, message, html = false) {
+          statusBox.className = `status-box show ${type}`;
+          if (html) statusBox.innerHTML = message;
+          else statusBox.textContent = message;
+        }
+
+        function clearStatus() {
+          statusBox.className = "status-box";
+          statusBox.textContent = "";
+        }
+
+        function updateButton() {
+          const emailValid = buyerEmail.checkValidity() && buyerEmail.value.trim();
+          const ready = publicKey && quoteReady && acceptTerms.checked && emailValid && !busy;
+          buyButton.disabled = !ready;
+          if (busy) buyButton.textContent = "Preparing Transaction…";
+          else if (!publicKey) buyButton.textContent = "Connect Wallet to Buy";
+          else if (!quoteReady) buyButton.textContent = "Loading Live Price…";
+          else if (!emailValid) buyButton.textContent = "Enter Email to Continue";
+          else if (!acceptTerms.checked) buyButton.textContent = "Accept Terms to Continue";
+          else buyButton.textContent = `Buy AiBoxs for $${selectedUsd.toFixed(2)}`;
+        }
+
+        function updateQuote() {
+          const value = Number(customAmount.value);
+          if (Number.isFinite(value) && value >= 0.5) selectedUsd = value;
+          if (!solUsd || !tokenUsd || selectedUsd < 0.5) {
+            quoteReady = false;
+            solAmountText.textContent = "— SOL";
+            tokenEstimateText.textContent = "— AiBoxs";
+            updateButton();
+            return;
+          }
+          const solAmount = selectedUsd / solUsd;
+          const estimatedTokens = selectedUsd / tokenUsd;
+          solAmountText.textContent = `${solAmount.toFixed(6)} SOL`;
+          tokenEstimateText.textContent = `${Math.floor(estimatedTokens).toLocaleString()} AiBoxs`;
+          quoteReady = true;
+          updateButton();
+        }
+
+        async function loadMarketData() {
+          try {
+            const response = await fetch(PUMP_COIN_API, { cache: "no-store" });
+            if (!response.ok) throw new Error("Live token data is unavailable.");
+            const coin = await response.json();
+            if (coin.mint !== MINT) throw new Error("Token verification failed.");
+
+            const marketCapSol = Number(coin.market_cap);
+            const marketCapUsd = Number(coin.usd_market_cap || coin.market_cap_usd);
+            if (!(marketCapSol > 0 && marketCapUsd > 0)) {
+              throw new Error("The reference price is unavailable.");
+            }
+
+            solUsd = marketCapUsd / marketCapSol;
+            tokenUsd = marketCapUsd / TOTAL_SUPPLY_TOKENS;
+            solPriceText.textContent = `$${solUsd.toFixed(2)}`;
+            routeLabel.textContent = coin.complete ? "PumpSwap / DEX" : "Pump.fun Bonding Curve";
+            updateQuote();
+          } catch (error) {
+            quoteReady = false;
+            solPriceText.textContent = "Unavailable";
+            setStatus("error", `${error.message} Please refresh and try again.`);
+            updateButton();
+          }
+        }
+
+        async function connectWallet() {
+          clearStatus();
+          provider = getProvider(walletType.value);
+          if (!provider?.connect) {
+            const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            setStatus(
+              "error",
+              mobile
+                ? "No compatible wallet was detected. Open this page inside the DApp browser of Phantom, Solflare, Backpack or Bitget Wallet."
+                : "The selected wallet extension was not detected. Install or unlock the wallet, then try again.",
+            );
+            return;
+          }
+
+          try {
+            connectButton.disabled = true;
+            connectButton.textContent = "Connecting…";
+            const result = await provider.connect();
+            publicKey = result?.publicKey || provider.publicKey;
+            if (!publicKey) throw new Error("The wallet did not return an address.");
+            publicKey = new solanaWeb3.PublicKey(publicKey.toString());
+            walletAddress.textContent = `Connected: ${shortAddress(publicKey.toBase58())}`;
+            connectButton.textContent = "Connected";
+            setStatus("success", "Wallet connected. Review the purchase estimate below.");
+            updateButton();
+
+            provider.on?.("disconnect", () => {
+              provider = null;
+              publicKey = null;
+              walletAddress.textContent = "No wallet connected";
+              connectButton.textContent = "Connect Wallet";
+              connectButton.disabled = false;
+              updateButton();
+            });
+          } catch (error) {
+            connectButton.textContent = "Connect Wallet";
+            connectButton.disabled = false;
+            setStatus("error", error.message || "Wallet connection was cancelled.");
+          }
+        }
+
+        async function sendWithWallet(transaction) {
+          if (typeof provider.signAndSendTransaction === "function") {
+            const result = await provider.signAndSendTransaction(transaction);
+            return typeof result === "string" ? result : result?.signature;
+          }
+          if (typeof provider.signTransaction !== "function") {
+            throw new Error("This wallet cannot sign the transaction.");
+          }
+          const signed = await provider.signTransaction(transaction);
+          return connection.sendRawTransaction(signed.serialize(), {
+            skipPreflight: false,
+            maxRetries: 3,
+          });
+        }
+
+        function recordPurchase(signature, solAmount) {
+          if (!CONTACT_ENDPOINT) return;
+          const form = document.createElement("form");
+          form.hidden = true;
+          form.method = "POST";
+          form.action = CONTACT_ENDPOINT;
+          form.target = "purchaseLogFrame";
+          const fields = {
+            name: "AiBoxs Website Buyer",
+            company: "",
+            email: buyerEmail.value.trim(),
+            service: "AiBoxs Token Purchase",
+            budget: `$${selectedUsd.toFixed(2)}`,
+            message: `Wallet: ${publicKey.toBase58()} | SOL: ${solAmount.toFixed(9)} | Mint: ${MINT} | Transaction: ${signature}`,
+            page: window.location.href,
+            submittedAt: new Date().toISOString(),
+          };
+          Object.entries(fields).forEach(([name, value]) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+          });
+          document.body.appendChild(form);
+          HTMLFormElement.prototype.submit.call(form);
+          window.setTimeout(() => form.remove(), 2500);
+        }
+
+        async function buyToken() {
+          if (busy || !publicKey || !quoteReady) return;
+          if (!buyerEmail.checkValidity()) {
+            buyerEmail.reportValidity();
+            return;
+          }
+          if (!acceptTerms.checked) return;
+
+          const solAmount = selectedUsd / solUsd;
+          busy = true;
+          updateButton();
+          setStatus("info", "Checking wallet balance…");
+
+          try {
+            try {
+              const balanceLamports = await connection.getBalance(publicKey, "confirmed");
+              const balanceSol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
+              if (balanceSol < solAmount + RESERVED_SOL) {
+                throw new Error(
+                  `Insufficient SOL. Keep at least ${RESERVED_SOL} SOL after the purchase for network and account fees.`,
+                );
+              }
+            } catch (balanceError) {
+              if (balanceError.message.startsWith("Insufficient SOL")) throw balanceError;
+              // Public RPC balance checks can be rate-limited. The wallet still performs final validation.
+            }
+
+            setStatus("info", "Building the Pump.fun transaction…");
+            const response = await fetch(TRADE_API, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                publicKey: publicKey.toBase58(),
+                action: "buy",
+                mint: MINT,
+                amount: Number(solAmount.toFixed(9)),
+                denominatedInSol: "true",
+                slippage: SLIPPAGE,
+                priorityFee: PRIORITY_FEE_SOL,
+                pool: "pump",
+              }),
+            });
+
+            if (!response.ok) {
+              const details = await response.text();
+              throw new Error(details || "The transaction could not be created.");
+            }
+
+            const bytes = new Uint8Array(await response.arrayBuffer());
+            const transaction = solanaWeb3.VersionedTransaction.deserialize(bytes);
+            setStatus("info", "Approve the transaction in your wallet. Check the amount and official mint before signing.");
+            const signature = await sendWithWallet(transaction);
+            if (!signature) throw new Error("The wallet did not return a transaction signature.");
+
+            setStatus("info", "Transaction submitted. Waiting for Solana confirmation…");
+            try {
+              await connection.confirmTransaction(signature, "confirmed");
+            } catch (_) {
+              // A submitted signature remains verifiable even if the public RPC confirmation is rate-limited.
+            }
+
+            recordPurchase(signature, solAmount);
+            const explorer = `https://solscan.io/tx/${encodeURIComponent(signature)}`;
+            setStatus(
+              "success",
+              `Purchase submitted successfully. <a href="${explorer}" target="_blank" rel="noopener noreferrer">View transaction on Solscan ↗</a>`,
+              true,
+            );
+          } catch (error) {
+            const message = String(error?.message || error || "Purchase failed.");
+            const friendly = /reject|cancel|declin/i.test(message)
+              ? "The transaction was cancelled in your wallet. No purchase was made."
+              : message;
+            setStatus("error", friendly);
+          } finally {
+            busy = false;
+            updateButton();
+            loadMarketData();
+          }
+        }
+
+        document.querySelectorAll(".preset").forEach((button) => {
+          button.addEventListener("click", () => {
+            document.querySelectorAll(".preset").forEach((item) => item.classList.remove("active"));
+            button.classList.add("active");
+            if (button.dataset.usd !== "custom") {
+              customAmount.value = Number(button.dataset.usd).toFixed(2);
+            } else {
+              customAmount.focus();
+              customAmount.select();
+            }
+            updateQuote();
+          });
+        });
+
+        customAmount.addEventListener("input", () => {
+          document.querySelectorAll(".preset").forEach((item) => {
+            item.classList.toggle("active", item.dataset.usd === "custom");
+          });
+          updateQuote();
+        });
+        buyerEmail.addEventListener("input", updateButton);
+        acceptTerms.addEventListener("change", updateButton);
+        connectButton.addEventListener("click", connectWallet);
+        buyButton.addEventListener("click", buyToken);
+        document.getElementById("copyMint").addEventListener("click", async () => {
+          await navigator.clipboard.writeText(MINT);
+          document.getElementById("copyMint").textContent = "Copied";
+          window.setTimeout(() => (document.getElementById("copyMint").textContent = "Copy"), 1200);
+        });
+
+        loadMarketData();
+        window.setInterval(loadMarketData, 20000);
+      })();
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
