@@ -1,15 +1,15 @@
 <!doctype html>
-<!-- AiBox Tech Solutions — Rev.13 -->
+<!-- AiBox Tech Solutions — Rev.14 -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Buy AiBoxs Token with SOL directly from the AiBox Tech Solutions website using your own Solana wallet."
+      content="Buy AiBoxs Token with USDC directly from the AiBox Tech Solutions website using your own Solana wallet."
     />
     <meta name="theme-color" content="#070a12" />
-    <meta name="aibox-revision" content="Rev.13" />
+    <meta name="aibox-revision" content="Rev.14" />
     <title>Buy AiBoxs Token | AiBox Tech Solutions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -444,7 +444,7 @@
       <div class="container">
         <section class="buy-intro">
           <span class="eyebrow">AIBOXS UTILITY TOKEN</span>
-          <h1>Buy AiBoxs directly with SOL.</h1>
+          <h1>Buy AiBoxs directly with USDC.</h1>
           <p>
             Connect your own Solana wallet, choose an amount and approve the
             transaction securely. AiBox never receives your seed phrase or
@@ -555,10 +555,10 @@
 
             <div class="quote-box" aria-live="polite">
               <div class="quote-row">
-                <span>Reference SOL price</span><strong id="solPrice">Loading…</strong>
+                <span>Payment asset</span><strong id="solPrice">Loading…</strong>
               </div>
               <div class="quote-row">
-                <span>You pay</span><strong id="solAmount">— SOL</strong>
+                <span>Maximum payment</span><strong id="solAmount">— USDC</strong>
               </div>
               <div class="quote-row total">
                 <span>Estimated receive</span><strong id="tokenEstimate">— AiBoxs</strong>
@@ -583,10 +583,9 @@
             </button>
             <div class="status-box" id="tradeStatus" role="status" aria-live="polite"></div>
             <p class="trade-note">
-              Keep at least 0.01 SOL in your wallet for network fees and account
-              creation. Price and token output are estimates until you approve
-              the transaction. Trade construction is provided by PumpPortal, a
-              third-party Pump.fun API.
+              AiBoxs uses a USDC bonding curve. Keep at least 0.01 SOL in your
+              wallet for network fees and account creation. The page simulates
+              every transaction before requesting your wallet signature.
             </p>
           </section>
         </div>
@@ -621,7 +620,7 @@
       </div>
       <div class="container footer-bottom">
         <span>© 2026 AiBox Tech Solutions. All rights reserved.</span>
-        <span>Build • Automate • Launch</span>
+        <span>Build • Automate • Launch&nbsp;&nbsp;|&nbsp;&nbsp;Revision: Rev.14</span>
       </div>
     </footer>
 
@@ -641,22 +640,31 @@
     </a>
 
     <iframe id="purchaseLogFrame" name="purchaseLogFrame" title="Purchase record submission" hidden></iframe>
-    <script src="https://unpkg.com/@solana/web3.js@1.98.4/lib/index.iife.min.js" crossorigin="anonymous"></script>
-    <script>
+    <script type="module">
+      import * as solanaWeb3 from "https://esm.sh/@solana/web3.js@1.98.4?bundle";
+      import {
+        TOKEN_PROGRAM_ID,
+        TOKEN_2022_PROGRAM_ID,
+        createAssociatedTokenAccountIdempotentInstruction,
+        getAssociatedTokenAddressSync,
+      } from "https://esm.sh/@solana/spl-token@0.4.13?bundle";
+      import { PUMP_SDK } from "https://esm.sh/@pump-fun/pump-sdk@1.37.0?bundle";
+      import BN from "https://esm.sh/bn.js@5.2.2?bundle";
+
       (() => {
         "use strict";
 
         const MINT = "5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump";
-        const TRADE_API = "https://pumpportal.fun/api/trade-local";
         const RPC_ENDPOINT = "https://solana-rpc.publicnode.com";
         const RPC_FALLBACK = "https://api.mainnet-beta.solana.com";
         const PUMP_PROGRAM = "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P";
+        const USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
         const CONTACT_ENDPOINT =
           "https://script.google.com/macros/s/AKfycbxBeiHMhyMlQkI6QYEULsDI9so0oqC4lal77IkZ9yZ9djUkEfKZzUVvzxC4DOaop6aq/exec";
         const SLIPPAGE = 10;
-        const PRIORITY_FEE_SOL = 0.0001;
         const RESERVED_SOL = 0.01;
         const TOKEN_DECIMALS = 6;
+        const USDC_DECIMALS = 6;
 
         const connection = new solanaWeb3.Connection(RPC_ENDPOINT, "confirmed");
         const walletType = document.getElementById("walletType");
@@ -675,8 +683,8 @@
         let provider = null;
         let publicKey = null;
         let selectedUsd = 0.99;
-        let solUsd = 0;
         let tokenUsd = 0;
+        let bondingCurveData = null;
         let quoteReady = false;
         let busy = false;
         let marketErrorShown = false;
@@ -734,47 +742,19 @@
         function updateQuote() {
           const value = Number(customAmount.value);
           if (Number.isFinite(value) && value >= 0.5) selectedUsd = value;
-          if (!solUsd || !tokenUsd || selectedUsd < 0.5) {
+          if (!tokenUsd || selectedUsd < 0.5) {
             quoteReady = false;
-            solAmountText.textContent = "— SOL";
+            solAmountText.textContent = "— USDC";
             tokenEstimateText.textContent = "— AiBoxs";
             updateButton();
             return;
           }
-          const solAmount = selectedUsd / solUsd;
-          const estimatedTokens = selectedUsd / tokenUsd;
-          solAmountText.textContent = `${solAmount.toFixed(6)} SOL`;
+          const quoteBeforeSlippage = selectedUsd / (1 + SLIPPAGE / 100);
+          const estimatedTokens = quoteBeforeSlippage / tokenUsd;
+          solAmountText.textContent = `${selectedUsd.toFixed(2)} USDC`;
           tokenEstimateText.textContent = `${Math.floor(estimatedTokens).toLocaleString()} AiBoxs`;
           quoteReady = true;
           updateButton();
-        }
-
-        async function getSolUsd() {
-          const sources = [
-            fetch("https://api.binance.com/api/v3/ticker/price?symbol=SOLUSDT", {
-              cache: "no-store",
-            })
-              .then((response) => {
-                if (!response.ok) throw new Error("Binance price unavailable");
-                return response.json();
-              })
-              .then((data) => Number(data.price)),
-            fetch(
-              "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd",
-              { cache: "no-store" },
-            )
-              .then((response) => {
-                if (!response.ok) throw new Error("CoinGecko price unavailable");
-                return response.json();
-              })
-              .then((data) => Number(data.solana?.usd)),
-          ].map((request) =>
-            request.then((price) => {
-              if (!(price > 0)) throw new Error("Invalid SOL price");
-              return price;
-            }),
-          );
-          return Promise.any(sources);
         }
 
         async function getBondingCurveAccount(address) {
@@ -803,26 +783,32 @@
               [new TextEncoder().encode("bonding-curve"), mintKey.toBytes()],
               programKey,
             );
-            const [liveSolUsd, account] = await Promise.all([
-              getSolUsd(),
-              getBondingCurveAccount(bondingCurve),
-            ]);
+            const account = await getBondingCurveAccount(bondingCurve);
             if (!account?.data || account.data.length < 49) {
               throw new Error("The on-chain bonding curve is unavailable.");
             }
+            if (account.data.length < 115) {
+              throw new Error("The token quote configuration is unavailable.");
+            }
+
+            const quoteMint = new solanaWeb3.PublicKey(account.data.slice(83, 115));
+            if (quoteMint.toBase58() !== USDC_MINT) {
+              throw new Error("The token payment asset is not USDC.");
+            }
+            if (account.data[48]) {
+              throw new Error("The token has migrated from the bonding curve.");
+            }
 
             const virtualTokens = readU64(account.data, 8) / 10 ** TOKEN_DECIMALS;
-            const virtualSol = readU64(account.data, 16) / solanaWeb3.LAMPORTS_PER_SOL;
-            if (!(virtualTokens > 0 && virtualSol > 0 && liveSolUsd > 0)) {
+            const virtualUsdc = readU64(account.data, 16) / 10 ** USDC_DECIMALS;
+            if (!(virtualTokens > 0 && virtualUsdc > 0)) {
               throw new Error("The reference price is unavailable.");
             }
 
-            solUsd = liveSolUsd;
-            tokenUsd = (virtualSol / virtualTokens) * solUsd;
-            solPriceText.textContent = `$${solUsd.toFixed(2)}`;
-            routeLabel.textContent = account.data[48]
-              ? "PumpSwap / DEX"
-              : "Pump.fun Bonding Curve";
+            tokenUsd = virtualUsdc / virtualTokens;
+            bondingCurveData = account.data;
+            solPriceText.textContent = "USDC (1 USD)";
+            routeLabel.textContent = "Pump.fun USDC Bonding Curve";
             if (marketErrorShown) clearStatus();
             marketErrorShown = false;
             updateQuote();
@@ -891,7 +877,7 @@
           });
         }
 
-        function recordPurchase(signature, solAmount) {
+        function recordPurchase(signature, usdcAmount) {
           if (!CONTACT_ENDPOINT) return;
           const form = document.createElement("form");
           form.hidden = true;
@@ -904,7 +890,7 @@
             email: buyerEmail.value.trim(),
             service: "AiBoxs Token Purchase",
             budget: `$${selectedUsd.toFixed(2)}`,
-            message: `Wallet: ${publicKey.toBase58()} | SOL: ${solAmount.toFixed(9)} | Mint: ${MINT} | Transaction: ${signature}`,
+            message: `Wallet: ${publicKey.toBase58()} | Maximum USDC: ${usdcAmount.toFixed(2)} | Mint: ${MINT} | Transaction: ${signature}`,
             page: window.location.href,
             submittedAt: new Date().toISOString(),
           };
@@ -928,7 +914,6 @@
           }
           if (!acceptTerms.checked) return;
 
-          const solAmount = selectedUsd / solUsd;
           busy = true;
           updateButton();
           setStatus("info", "Checking wallet balance…");
@@ -937,9 +922,9 @@
             try {
               const balanceLamports = await connection.getBalance(publicKey, "confirmed");
               const balanceSol = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
-              if (balanceSol < solAmount + RESERVED_SOL) {
+              if (balanceSol < RESERVED_SOL) {
                 throw new Error(
-                  `Insufficient SOL. Keep at least ${RESERVED_SOL} SOL after the purchase for network and account fees.`,
+                  `Insufficient SOL. Keep at least ${RESERVED_SOL} SOL for network and account fees.`,
                 );
               }
             } catch (balanceError) {
@@ -947,41 +932,89 @@
               // Public RPC balance checks can be rate-limited. The wallet still performs final validation.
             }
 
-            setStatus("info", "Building the Pump.fun transaction…");
-            const response = await fetch(TRADE_API, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                publicKey: publicKey.toBase58(),
-                action: "buy",
-                mint: MINT,
-                amount: Number(solAmount.toFixed(9)),
-                denominatedInSol: "true",
-                slippage: SLIPPAGE,
-                priorityFee: PRIORITY_FEE_SOL,
-                pool: "auto",
-              }),
-            });
-
-            if (!response.ok) {
-              const details = await response.text();
-              throw new Error(details || "The transaction could not be created.");
+            setStatus("info", "Checking USDC balance and building the transaction…");
+            const mintKey = new solanaWeb3.PublicKey(MINT);
+            const usdcMintKey = new solanaWeb3.PublicKey(USDC_MINT);
+            const usdcAccount = getAssociatedTokenAddressSync(
+              usdcMintKey,
+              publicKey,
+              false,
+              TOKEN_PROGRAM_ID,
+            );
+            const usdcBalance = await connection.getTokenAccountBalance(
+              usdcAccount,
+              "confirmed",
+            );
+            if (Number(usdcBalance.value.uiAmountString) < selectedUsd) {
+              throw new Error(`Insufficient USDC. This purchase requires up to ${selectedUsd.toFixed(2)} USDC.`);
             }
+            if (!bondingCurveData) throw new Error("Reload the live token data and try again.");
 
-            const bytes = new Uint8Array(await response.arrayBuffer());
-            const transaction = solanaWeb3.VersionedTransaction.deserialize(bytes);
+            const creator = new solanaWeb3.PublicKey(bondingCurveData.slice(49, 81));
+            const quoteBeforeSlippage = selectedUsd / (1 + SLIPPAGE / 100);
+            const tokenUnits = Math.floor(
+              (quoteBeforeSlippage / tokenUsd) * 10 ** TOKEN_DECIMALS,
+            );
+            const maxUsdcUnits = Math.floor(selectedUsd * 10 ** USDC_DECIMALS);
+            const userTokenAccount = getAssociatedTokenAddressSync(
+              mintKey,
+              publicKey,
+              true,
+              TOKEN_2022_PROGRAM_ID,
+            );
+            const instructions = [
+              solanaWeb3.ComputeBudgetProgram.setComputeUnitLimit({ units: 400000 }),
+              createAssociatedTokenAccountIdempotentInstruction(
+                publicKey,
+                userTokenAccount,
+                publicKey,
+                mintKey,
+                TOKEN_2022_PROGRAM_ID,
+              ),
+              await PUMP_SDK.getBuyV2InstructionRaw({
+                user: publicKey,
+                mint: mintKey,
+                creator,
+                amount: new BN(String(tokenUnits)),
+                quoteAmount: new BN(String(maxUsdcUnits)),
+                tokenProgram: TOKEN_2022_PROGRAM_ID,
+                quoteMint: usdcMintKey,
+                quoteTokenProgram: TOKEN_PROGRAM_ID,
+              }),
+            ];
+            const latestBlockhash = await connection.getLatestBlockhash("confirmed");
+            const transaction = new solanaWeb3.VersionedTransaction(
+              new solanaWeb3.TransactionMessage({
+                payerKey: publicKey,
+                recentBlockhash: latestBlockhash.blockhash,
+                instructions,
+              }).compileToV0Message(),
+            );
+
+            setStatus("info", "Simulating the transaction for safety…");
+            const simulation = await connection.simulateTransaction(transaction, {
+              sigVerify: false,
+              replaceRecentBlockhash: true,
+              commitment: "confirmed",
+            });
+            if (simulation.value.err) {
+              throw new Error(`Transaction safety check failed: ${JSON.stringify(simulation.value.err)}`);
+            }
             setStatus("info", "Approve the transaction in your wallet. Check the amount and official mint before signing.");
             const signature = await sendWithWallet(transaction);
             if (!signature) throw new Error("The wallet did not return a transaction signature.");
 
             setStatus("info", "Transaction submitted. Waiting for Solana confirmation…");
             try {
-              await connection.confirmTransaction(signature, "confirmed");
+              await connection.confirmTransaction(
+                { signature, ...latestBlockhash },
+                "confirmed",
+              );
             } catch (_) {
               // A submitted signature remains verifiable even if the public RPC confirmation is rate-limited.
             }
 
-            recordPurchase(signature, solAmount);
+            recordPurchase(signature, selectedUsd);
             const explorer = `https://solscan.io/tx/${encodeURIComponent(signature)}`;
             setStatus(
               "success",
