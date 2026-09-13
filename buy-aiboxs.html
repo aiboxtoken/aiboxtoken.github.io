@@ -647,15 +647,16 @@
         "use strict";
 
         const MINT = "5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump";
-        const PUMP_COIN_API = `https://frontend-api-v3.pump.fun/coins/${MINT}`;
         const TRADE_API = "https://pumpportal.fun/api/trade-local";
-        const RPC_ENDPOINT = "https://api.mainnet-beta.solana.com";
+        const RPC_ENDPOINT = "https://solana-rpc.publicnode.com";
+        const RPC_FALLBACK = "https://api.mainnet-beta.solana.com";
+        const PUMP_PROGRAM = "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P";
         const CONTACT_ENDPOINT =
           "https://script.google.com/macros/s/AKfycbxBeiHMhyMlQkI6QYEULsDI9so0oqC4lal77IkZ9yZ9djUkEfKZzUVvzxC4DOaop6aq/exec";
         const SLIPPAGE = 10;
         const PRIORITY_FEE_SOL = 0.0001;
         const RESERVED_SOL = 0.01;
-        const TOTAL_SUPPLY_TOKENS = 1_000_000_000;
+        const TOKEN_DECIMALS = 6;
 
         const connection = new solanaWeb3.Connection(RPC_ENDPOINT, "confirmed");
         const walletType = document.getElementById("walletType");
@@ -678,6 +679,7 @@
         let tokenUsd = 0;
         let quoteReady = false;
         let busy = false;
+        let marketErrorShown = false;
 
         function providerMap() {
           return {
@@ -714,6 +716,7 @@
         function clearStatus() {
           statusBox.className = "status-box";
           statusBox.textContent = "";
+          marketErrorShown = false;
         }
 
         function updateButton() {
@@ -746,28 +749,88 @@
           updateButton();
         }
 
+        async function getSolUsd() {
+          const sources = [
+            fetch("https://api.binance.com/api/v3/ticker/price?symbol=SOLUSDT", {
+              cache: "no-store",
+            })
+              .then((response) => {
+                if (!response.ok) throw new Error("Binance price unavailable");
+                return response.json();
+              })
+              .then((data) => Number(data.price)),
+            fetch(
+              "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd",
+              { cache: "no-store" },
+            )
+              .then((response) => {
+                if (!response.ok) throw new Error("CoinGecko price unavailable");
+                return response.json();
+              })
+              .then((data) => Number(data.solana?.usd)),
+          ].map((request) =>
+            request.then((price) => {
+              if (!(price > 0)) throw new Error("Invalid SOL price");
+              return price;
+            }),
+          );
+          return Promise.any(sources);
+        }
+
+        async function getBondingCurveAccount(address) {
+          try {
+            const result = await connection.getAccountInfo(address, "confirmed");
+            if (result) return result;
+          } catch (_) {
+            // Try the Solana public endpoint if the primary RPC is unavailable.
+          }
+          return new solanaWeb3.Connection(RPC_FALLBACK, "confirmed").getAccountInfo(
+            address,
+            "confirmed",
+          );
+        }
+
+        function readU64(data, offset) {
+          const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+          return Number(view.getBigUint64(offset, true));
+        }
+
         async function loadMarketData() {
           try {
-            const response = await fetch(PUMP_COIN_API, { cache: "no-store" });
-            if (!response.ok) throw new Error("Live token data is unavailable.");
-            const coin = await response.json();
-            if (coin.mint !== MINT) throw new Error("Token verification failed.");
+            const mintKey = new solanaWeb3.PublicKey(MINT);
+            const programKey = new solanaWeb3.PublicKey(PUMP_PROGRAM);
+            const [bondingCurve] = solanaWeb3.PublicKey.findProgramAddressSync(
+              [new TextEncoder().encode("bonding-curve"), mintKey.toBytes()],
+              programKey,
+            );
+            const [liveSolUsd, account] = await Promise.all([
+              getSolUsd(),
+              getBondingCurveAccount(bondingCurve),
+            ]);
+            if (!account?.data || account.data.length < 49) {
+              throw new Error("The on-chain bonding curve is unavailable.");
+            }
 
-            const marketCapSol = Number(coin.market_cap);
-            const marketCapUsd = Number(coin.usd_market_cap || coin.market_cap_usd);
-            if (!(marketCapSol > 0 && marketCapUsd > 0)) {
+            const virtualTokens = readU64(account.data, 8) / 10 ** TOKEN_DECIMALS;
+            const virtualSol = readU64(account.data, 16) / solanaWeb3.LAMPORTS_PER_SOL;
+            if (!(virtualTokens > 0 && virtualSol > 0 && liveSolUsd > 0)) {
               throw new Error("The reference price is unavailable.");
             }
 
-            solUsd = marketCapUsd / marketCapSol;
-            tokenUsd = marketCapUsd / TOTAL_SUPPLY_TOKENS;
+            solUsd = liveSolUsd;
+            tokenUsd = (virtualSol / virtualTokens) * solUsd;
             solPriceText.textContent = `$${solUsd.toFixed(2)}`;
-            routeLabel.textContent = coin.complete ? "PumpSwap / DEX" : "Pump.fun Bonding Curve";
+            routeLabel.textContent = account.data[48]
+              ? "PumpSwap / DEX"
+              : "Pump.fun Bonding Curve";
+            if (marketErrorShown) clearStatus();
+            marketErrorShown = false;
             updateQuote();
           } catch (error) {
             quoteReady = false;
             solPriceText.textContent = "Unavailable";
             setStatus("error", `${error.message} Please refresh and try again.`);
+            marketErrorShown = true;
             updateButton();
           }
         }
@@ -896,7 +959,7 @@
                 denominatedInSol: "true",
                 slippage: SLIPPAGE,
                 priorityFee: PRIORITY_FEE_SOL,
-                pool: "pump",
+                pool: "auto",
               }),
             });
 
