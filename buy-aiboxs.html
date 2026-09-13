@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- AiBox Tech Solutions — Rev.14 -->
+<!-- AiBox Tech Solutions — Rev.15 -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -9,7 +9,7 @@
       content="Buy AiBoxs Token with USDC directly from the AiBox Tech Solutions website using your own Solana wallet."
     />
     <meta name="theme-color" content="#070a12" />
-    <meta name="aibox-revision" content="Rev.14" />
+    <meta name="aibox-revision" content="Rev.15" />
     <title>Buy AiBoxs Token | AiBox Tech Solutions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -620,7 +620,7 @@
       </div>
       <div class="container footer-bottom">
         <span>© 2026 AiBox Tech Solutions. All rights reserved.</span>
-        <span>Build • Automate • Launch&nbsp;&nbsp;|&nbsp;&nbsp;Revision: Rev.14</span>
+        <span>Build • Automate • Launch&nbsp;&nbsp;|&nbsp;&nbsp;Revision: Rev.15</span>
       </div>
     </footer>
 
@@ -941,11 +941,14 @@
               false,
               TOKEN_PROGRAM_ID,
             );
-            const usdcBalance = await connection.getTokenAccountBalance(
+            const usdcAccountInfo = await connection.getAccountInfo(
               usdcAccount,
               "confirmed",
             );
-            if (Number(usdcBalance.value.uiAmountString) < selectedUsd) {
+            const usdcUnits = usdcAccountInfo?.data?.length >= 72
+              ? readU64(usdcAccountInfo.data, 64)
+              : 0;
+            if (usdcUnits < Math.floor(selectedUsd * 10 ** USDC_DECIMALS)) {
               throw new Error(`Insufficient USDC. This purchase requires up to ${selectedUsd.toFixed(2)} USDC.`);
             }
             if (!bondingCurveData) throw new Error("Reload the live token data and try again.");
