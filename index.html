@@ -166,7 +166,8 @@
       .cloud-feature { padding: 18px; border: 1px solid rgba(255,255,255,.11); border-radius: 18px; background: rgba(255,255,255,.045); }
       .cloud-feature strong { display: block; font-size: 18px; margin-bottom: 6px; }
       .cloud-feature small { color: rgba(255,255,255,.58); line-height: 1.5; }
-      .cloud-offer { padding: 28px; border-radius: 22px; text-align: center; background: linear-gradient(145deg, #1479ff, #6a48ff); box-shadow: 0 20px 44px rgba(48, 101, 255, .3); }
+      .cloud-offer { display:block; padding: 28px; border-radius: 22px; text-align: center; background: linear-gradient(145deg, #1479ff, #6a48ff); box-shadow: 0 20px 44px rgba(48, 101, 255, .3); color:#fff; text-decoration:none; transition:transform .2s ease, box-shadow .2s ease; }
+      .cloud-offer:hover { transform:translateY(-4px); box-shadow:0 26px 56px rgba(48,101,255,.44); }
       .cloud-offer .plan-size { display:block; font-size: clamp(58px, 8vw, 86px); font-weight: 900; letter-spacing: -.06em; line-height: .9; }
       .cloud-offer .plan-label { display:block; margin: 10px 0 22px; font-weight: 800; letter-spacing: .08em; }
       .pillar-card { min-height: 280px; }
@@ -283,11 +284,17 @@
                 <div class="cloud-feature"><strong>AI Search</strong><small>Qsirch helps surface files quickly and intelligently.</small></div>
               </div>
             </div>
-            <div class="cloud-offer">
+            <a
+              class="cloud-offer"
+              href="https://aibox.myqnapcloud.com/shop/aibox-cloud-free-15gb-13"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Get the AiBox Cloud 15GB Free Plan"
+            >
               <span class="plan-size">15GB</span>
               <span class="plan-label">FREE PLAN</span>
-              <a class="btn" href="cloud-service.html">Explore AiBox Cloud</a>
-            </div>
+              <span class="btn">Get 15GB Free</span>
+            </a>
           </div>
         </div>
       </section>
