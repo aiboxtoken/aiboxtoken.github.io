@@ -1,0 +1,677 @@
+<!doctype html>
+<!-- AiBox Tech Solutions — AiBoxs Landing Rev.1 -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="AiBoxs is the Solana utility token for the AiBox ecosystem, connecting AiBox Cloud, digital services and Web3."
+    />
+    <meta name="theme-color" content="#070a12" />
+    <meta name="aibox-revision" content="AiBoxs Landing Rev.1" />
+    <title>AiBoxs | Cloud Storage meets Solana</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      :root {
+        --aiboxs-blue: #38bdf8;
+        --aiboxs-violet: #7c5cff;
+        --aiboxs-cyan: #60e6ff;
+        --aiboxs-panel: rgba(12, 17, 31, 0.84);
+      }
+      .token-nav {
+        position: relative;
+        overflow: hidden;
+        border-color: rgba(96,230,255,.56) !important;
+        background: linear-gradient(110deg,#1479ff,#6a48ff 56%,#19c9ff) !important;
+        color: #fff !important;
+        box-shadow: 0 0 22px rgba(49,161,255,.38);
+      }
+      .aiboxs-hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(82px, 10vw, 132px) 0 72px;
+        background:
+          radial-gradient(circle at 78% 18%, rgba(83, 88, 255, .24), transparent 32%),
+          radial-gradient(circle at 20% 76%, rgba(39, 205, 255, .14), transparent 36%);
+      }
+      .aiboxs-hero::after {
+        content:"";
+        position:absolute;
+        inset:auto -15% -180px;
+        height:320px;
+        background:radial-gradient(ellipse at center,rgba(69,151,255,.18),transparent 65%);
+        pointer-events:none;
+      }
+      .aiboxs-hero-grid {
+        position:relative;
+        z-index:1;
+        display:grid;
+        grid-template-columns:minmax(0,1.15fr) minmax(310px,.85fr);
+        gap:48px;
+        align-items:center;
+      }
+      .token-kicker {
+        display:inline-flex;
+        align-items:center;
+        gap:9px;
+        padding:8px 12px;
+        border:1px solid rgba(96,230,255,.22);
+        border-radius:999px;
+        background:rgba(96,230,255,.06);
+        color:#9ceeff;
+        font-size:12px;
+        font-weight:800;
+        letter-spacing:.12em;
+      }
+      .token-kicker i {
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:#60e6ff;
+        box-shadow:0 0 18px #60e6ff;
+      }
+      .aiboxs-hero h1 {
+        margin:18px 0 18px;
+        max-width:780px;
+        font-size:clamp(48px,7.6vw,96px);
+        line-height:.94;
+        letter-spacing:-.055em;
+      }
+      .gradient-text {
+        background:linear-gradient(90deg,#fff 8%,#75dfff 50%,#9a85ff 92%);
+        -webkit-background-clip:text;
+        background-clip:text;
+        color:transparent;
+      }
+      .aiboxs-lead {
+        max-width:760px;
+        margin:0;
+        color:rgba(255,255,255,.7);
+        font-size:clamp(17px,2vw,21px);
+        line-height:1.7;
+      }
+      .aiboxs-actions {
+        display:flex;
+        flex-wrap:wrap;
+        gap:12px;
+        margin-top:30px;
+      }
+      .microcopy {
+        margin-top:16px;
+        color:rgba(255,255,255,.46);
+        font-size:12px;
+        line-height:1.6;
+      }
+      .token-orbit-card {
+        position:relative;
+        min-height:460px;
+        display:grid;
+        place-items:center;
+        padding:38px;
+        border:1px solid rgba(126,110,255,.27);
+        border-radius:34px;
+        background:
+          radial-gradient(circle at center,rgba(71,108,255,.2),transparent 44%),
+          linear-gradient(145deg,rgba(18,25,48,.94),rgba(7,10,18,.9));
+        box-shadow:0 35px 90px rgba(0,0,0,.34);
+        isolation:isolate;
+      }
+      .token-orbit-card::before,
+      .token-orbit-card::after {
+        content:"";
+        position:absolute;
+        border:1px solid rgba(96,230,255,.13);
+        border-radius:50%;
+      }
+      .token-orbit-card::before { width:300px;height:300px; }
+      .token-orbit-card::after { width:390px;height:390px; }
+      .token-orbit-card img {
+        position:relative;
+        z-index:2;
+        width:min(220px,58vw);
+        aspect-ratio:1;
+        object-fit:contain;
+        filter:drop-shadow(0 24px 44px rgba(45,139,255,.28));
+      }
+      .token-chip {
+        position:absolute;
+        z-index:3;
+        padding:10px 14px;
+        border:1px solid rgba(255,255,255,.12);
+        border-radius:14px;
+        background:rgba(7,10,18,.84);
+        backdrop-filter:blur(14px);
+        font-size:12px;
+        font-weight:800;
+      }
+      .token-chip.one { top:54px;left:38px; }
+      .token-chip.two { right:30px;top:145px; }
+      .token-chip.three { left:56px;bottom:52px; }
+
+      .landing-section { padding:82px 0; }
+      .landing-head {
+        max-width:760px;
+        margin-bottom:30px;
+      }
+      .landing-head h2 {
+        margin:9px 0 12px;
+        font-size:clamp(34px,5vw,58px);
+        line-height:1.02;
+        letter-spacing:-.04em;
+      }
+      .landing-head p { color:rgba(255,255,255,.64);line-height:1.75; }
+      .utility-grid {
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:16px;
+      }
+      .utility-card {
+        min-height:250px;
+        padding:26px;
+        border:1px solid rgba(255,255,255,.1);
+        border-radius:22px;
+        background:rgba(255,255,255,.035);
+      }
+      .utility-card .mark {
+        display:grid;
+        place-items:center;
+        width:48px;height:48px;
+        margin-bottom:36px;
+        border-radius:14px;
+        background:linear-gradient(145deg,rgba(56,189,248,.18),rgba(124,92,255,.2));
+        color:#9ceeff;
+        font-weight:900;
+      }
+      .utility-card h3 { margin:0 0 10px;font-size:22px; }
+      .utility-card p { margin:0;color:rgba(255,255,255,.6);line-height:1.7; }
+
+      .cloud-bridge {
+        display:grid;
+        grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);
+        gap:26px;
+        align-items:center;
+        padding:clamp(28px,5vw,52px);
+        border:1px solid rgba(72,199,255,.28);
+        border-radius:28px;
+        background:
+          radial-gradient(circle at 92% 12%,rgba(72,199,255,.18),transparent 38%),
+          linear-gradient(135deg,rgba(18,28,57,.95),rgba(8,12,24,.96));
+      }
+      .cloud-bridge h2 { margin:8px 0 13px;font-size:clamp(34px,5vw,58px); }
+      .cloud-bridge p { color:rgba(255,255,255,.65);line-height:1.75;max-width:720px; }
+      .free-plan-card {
+        display:block;
+        padding:30px;
+        text-align:center;
+        text-decoration:none;
+        color:#fff;
+        border-radius:24px;
+        background:linear-gradient(145deg,#1479ff,#6a48ff);
+        box-shadow:0 22px 52px rgba(48,101,255,.3);
+        transition:transform .2s ease;
+      }
+      .free-plan-card:hover { transform:translateY(-4px); }
+      .free-plan-card .size {
+        display:block;
+        font-size:clamp(58px,8vw,90px);
+        font-weight:900;
+        letter-spacing:-.06em;
+        line-height:.9;
+      }
+      .free-plan-card .label {
+        display:block;
+        margin:12px 0 22px;
+        font-weight:900;
+        letter-spacing:.12em;
+      }
+
+      .discount-panel {
+        display:grid;
+        grid-template-columns:auto 1fr auto;
+        gap:24px;
+        align-items:center;
+        padding:30px;
+        border:1px solid rgba(126,110,255,.3);
+        border-radius:24px;
+        background:var(--aiboxs-panel);
+      }
+      .discount-badge {
+        width:96px;height:96px;
+        display:grid;
+        place-items:center;
+        border-radius:50%;
+        background:linear-gradient(145deg,#8b7cff,#48c7ff);
+        color:#fff;
+        font-size:29px;
+        font-weight:900;
+      }
+      .discount-panel h2 { margin:5px 0 8px;font-size:clamp(28px,4vw,44px); }
+      .discount-panel p { margin:0;color:rgba(255,255,255,.62);line-height:1.7; }
+
+      .verify-grid {
+        display:grid;
+        grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+        gap:24px;
+      }
+      .verify-card,
+      .steps-card {
+        padding:30px;
+        border:1px solid rgba(255,255,255,.1);
+        border-radius:24px;
+        background:rgba(255,255,255,.035);
+      }
+      .verify-card h3,.steps-card h3 { margin:0 0 16px;font-size:24px; }
+      .mint-box {
+        margin:18px 0;
+        padding:16px;
+        border:1px solid rgba(96,230,255,.2);
+        border-radius:16px;
+        background:rgba(4,9,18,.7);
+      }
+      .mint-box code {
+        display:block;
+        overflow-wrap:anywhere;
+        color:#a6edff;
+        font-size:13px;
+        line-height:1.7;
+      }
+      .verify-actions { display:flex;flex-wrap:wrap;gap:10px; }
+      .steps-list {
+        display:grid;
+        gap:13px;
+      }
+      .steps-list div {
+        display:grid;
+        grid-template-columns:42px 1fr;
+        gap:13px;
+        align-items:start;
+        padding:15px;
+        border-radius:16px;
+        background:rgba(255,255,255,.035);
+      }
+      .steps-list b {
+        display:grid;
+        place-items:center;
+        width:36px;height:36px;
+        border-radius:11px;
+        background:rgba(124,92,255,.16);
+        color:#a99cff;
+      }
+      .steps-list strong { display:block;margin:2px 0 4px; }
+      .steps-list span { color:rgba(255,255,255,.58);font-size:14px;line-height:1.55; }
+
+      .risk-note {
+        margin-top:22px;
+        padding:18px 20px;
+        border-left:3px solid rgba(96,230,255,.6);
+        background:rgba(96,230,255,.05);
+        color:rgba(255,255,255,.58);
+        font-size:13px;
+        line-height:1.65;
+      }
+      .final-cta {
+        text-align:center;
+        padding:78px 24px;
+        border:1px solid rgba(126,110,255,.25);
+        border-radius:28px;
+        background:
+          radial-gradient(circle at 50% 0%,rgba(92,79,255,.22),transparent 48%),
+          rgba(255,255,255,.03);
+      }
+      .final-cta h2 {
+        margin:8px auto 15px;
+        max-width:760px;
+        font-size:clamp(38px,6vw,68px);
+        line-height:1;
+        letter-spacing:-.045em;
+      }
+      .final-cta p {
+        max-width:680px;
+        margin:0 auto;
+        color:rgba(255,255,255,.62);
+        line-height:1.7;
+      }
+      .final-cta .aiboxs-actions { justify-content:center; }
+
+      @media (max-width: 900px) {
+        .aiboxs-hero-grid,
+        .cloud-bridge,
+        .verify-grid { grid-template-columns:1fr; }
+        .token-orbit-card { min-height:390px; }
+        .utility-grid { grid-template-columns:1fr; }
+        .discount-panel { grid-template-columns:auto 1fr; }
+        .discount-panel .btn { grid-column:1/-1; }
+      }
+      @media (max-width: 560px) {
+        .aiboxs-hero { padding-top:58px; }
+        .aiboxs-hero h1 { font-size:clamp(44px,15vw,64px); }
+        .token-orbit-card { min-height:340px;padding:24px; }
+        .token-orbit-card::before { width:230px;height:230px; }
+        .token-orbit-card::after { width:300px;height:300px; }
+        .token-chip { font-size:10px;padding:8px 10px; }
+        .token-chip.one { top:34px;left:20px; }
+        .token-chip.two { right:14px;top:110px; }
+        .token-chip.three { left:24px;bottom:30px; }
+        .discount-panel { grid-template-columns:1fr;text-align:center; }
+        .discount-badge { margin:auto; }
+        .discount-panel .btn { grid-column:auto; }
+        .aiboxs-actions .btn { width:100%;text-align:center; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="nav-wrap">
+      <nav class="nav container">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/aibox-logo-icon.png" alt="AiBox Tech Solutions logo" />
+          <span>AiBox <b>Tech Solutions</b></span>
+        </a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+        <div class="nav-links" id="navLinks">
+          <a href="services.html">Services</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="packages.html">Packages</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="security.html">Security</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="nav-actions">
+          <a class="btn btn-small token-nav" href="aiboxs.html">AiBoxs</a>
+          <a class="btn btn-small" href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="aiboxs-hero">
+        <div class="container aiboxs-hero-grid">
+          <div>
+            <span class="token-kicker"><i></i>AIBOXS • SOLANA UTILITY TOKEN</span>
+            <h1><span class="gradient-text">Cloud Storage</span><br />meets Solana.</h1>
+            <p class="aiboxs-lead">
+              AiBoxs is the utility token for the AiBox ecosystem — connecting cloud services,
+              digital infrastructure and Web3 in one practical experience.
+            </p>
+            <div class="aiboxs-actions">
+              <a
+                class="btn"
+                href="buy-aiboxs.html?utm_source=aiboxs_landing&utm_medium=website&utm_campaign=aiboxs_utility"
+                data-track="buy-wallet"
+              >Buy with Wallet</a>
+              <a
+                class="btn btn-ghost"
+                href="https://pump.fun/coin/5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="view-pump"
+              >View on Pump.fun ↗</a>
+              <a class="btn btn-ghost" href="#verify" data-track="verify-mint">Verify Mint</a>
+            </div>
+            <p class="microcopy">
+              Built for utility around AiBox services. Crypto assets are volatile; verify the official
+              mint and understand the risks before interacting.
+            </p>
+          </div>
+
+          <div class="token-orbit-card" aria-label="AiBoxs token visual">
+            <span class="token-chip one">SOLANA</span>
+            <span class="token-chip two">AIBOX CLOUD</span>
+            <span class="token-chip three">UTILITY</span>
+            <img src="assets/aiboxs-token-logo.png" alt="AiBoxs Token logo" />
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section">
+        <div class="container">
+          <div class="landing-head">
+            <span class="eyebrow">UTILITY FIRST</span>
+            <h2>Built around services people can actually use.</h2>
+            <p>
+              AiBoxs is designed as the Web3 layer of AiBox Tech Solutions. The focus is practical:
+              connect token utility with real digital services rather than relying on price promises.
+            </p>
+          </div>
+          <div class="utility-grid">
+            <article class="utility-card">
+              <span class="mark">CL</span>
+              <h3>AiBox Cloud</h3>
+              <p>
+                Connect the AiBoxs ecosystem with cloud storage, sync, backup and digital workspace services.
+              </p>
+            </article>
+            <article class="utility-card">
+              <span class="mark">30%</span>
+              <h3>Eligible Service Benefit</h3>
+              <p>
+                Customers using AiBoxs for eligible AiBox Tech Solution services can receive a 30% service-fee discount, subject to quoted terms.
+              </p>
+            </article>
+            <article class="utility-card">
+              <span class="mark">W3</span>
+              <h3>Web3 Access</h3>
+              <p>
+                A Solana-based token experience with public on-chain verification and wallet connectivity.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section" style="padding-top:20px">
+        <div class="container">
+          <div class="cloud-bridge">
+            <div>
+              <span class="eyebrow">START WITH THE PRODUCT</span>
+              <h2>Try AiBox Cloud with 15GB Free.</h2>
+              <p>
+                Explore the AiBox ecosystem from the service side first. Create a free AiBox Cloud account,
+                use your storage across devices, then discover how AiBoxs fits into the wider platform.
+              </p>
+              <div class="aiboxs-actions">
+                <a
+                  class="btn btn-ghost"
+                  href="cloud-service.html?utm_source=aiboxs_landing&utm_medium=website&utm_campaign=aiboxs_utility"
+                  data-track="learn-cloud"
+                >Explore AiBox Cloud</a>
+              </div>
+            </div>
+            <a
+              class="free-plan-card"
+              href="https://aibox.myqnapcloud.com/shop/aibox-cloud-free-15gb-13"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="free-15gb"
+            >
+              <span class="size">15GB</span>
+              <span class="label">FREE PLAN</span>
+              <span class="btn">Get Started</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section" style="padding-top:28px">
+        <div class="container">
+          <div class="discount-panel">
+            <div class="discount-badge">−30%</div>
+            <div>
+              <span class="eyebrow">AIBOXS TOKEN BENEFIT</span>
+              <h2>Save 30% on eligible AiBox service fees.</h2>
+              <p>
+                Available for eligible AiBox Tech Solution services and packages when payment is made with AiBoxs.
+                External blockchain, liquidity and paid third-party costs are excluded unless confirmed in the quotation.
+              </p>
+            </div>
+            <a class="btn" href="packages.html?utm_source=aiboxs_landing&utm_medium=website&utm_campaign=aiboxs_utility" data-track="view-packages">View Packages</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section" id="verify">
+        <div class="container">
+          <div class="landing-head">
+            <span class="eyebrow">VERIFY BEFORE YOU INTERACT</span>
+            <h2>One token. One official mint.</h2>
+            <p>
+              Token names and logos can be copied. Always verify the Solana mint address before connecting a wallet or making a transaction.
+            </p>
+          </div>
+
+          <div class="verify-grid">
+            <div class="verify-card">
+              <h3>Official AiBoxs Mint</h3>
+              <div class="mint-box">
+                <code id="mintAddress">5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump</code>
+              </div>
+              <div class="verify-actions">
+                <button class="btn btn-small" type="button" id="copyMint" data-track="copy-mint">Copy Mint</button>
+                <a
+                  class="btn btn-small btn-outline"
+                  href="https://solscan.io/token/5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track="view-solscan"
+                >View on Solscan ↗</a>
+              </div>
+              <div class="risk-note">
+                Never share your seed phrase or private key. A legitimate wallet connection does not require you to reveal either one.
+              </div>
+            </div>
+
+            <div class="steps-card">
+              <h3>Explore AiBoxs safely</h3>
+              <div class="steps-list">
+                <div><b>1</b><span><strong>Learn the utility.</strong>Understand how AiBoxs relates to AiBox Cloud and eligible services.</span></div>
+                <div><b>2</b><span><strong>Verify the mint.</strong>Match the official address before interacting with any token page.</span></div>
+                <div><b>3</b><span><strong>Choose your route.</strong>View the token on Pump.fun or use the AiBox wallet purchase page.</span></div>
+                <div><b>4</b><span><strong>Review before signing.</strong>Confirm the asset, amount and wallet transaction details yourself.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section" style="padding-top:10px">
+        <div class="container">
+          <div class="final-cta">
+            <span class="eyebrow">AIBOXS • AIBOX ECOSYSTEM</span>
+            <h2>Explore the utility behind the token.</h2>
+            <p>
+              Start with AiBox Cloud, verify the official Solana mint, and choose how you want to explore the AiBoxs ecosystem.
+            </p>
+            <div class="aiboxs-actions">
+              <a
+                class="btn"
+                href="buy-aiboxs.html?utm_source=aiboxs_landing&utm_medium=website&utm_campaign=aiboxs_utility"
+                data-track="buy-wallet-final"
+              >Buy with Wallet</a>
+              <a
+                class="btn btn-ghost"
+                href="https://pump.fun/coin/5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="view-pump-final"
+              >View on Pump.fun ↗</a>
+              <a
+                class="btn btn-ghost"
+                href="https://aibox.myqnapcloud.com/shop/aibox-cloud-free-15gb-13"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="free-15gb-final"
+              >Get 15GB Free</a>
+            </div>
+            <div class="risk-note" style="max-width:820px;margin:24px auto 0;text-align:left">
+              AiBoxs is a crypto asset and may be highly volatile. Nothing on this page guarantees price,
+              liquidity, returns or future market performance. Verify information independently and use only
+              the official mint address shown above.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-main">
+        <div class="footer-brand">
+          <a class="brand" href="index.html">
+            <img class="brand-logo" src="assets/aibox-logo-icon.png" alt="AiBox Tech Solutions logo" />
+            <span>AiBox <b>Tech Solutions</b></span>
+          </a>
+          <p>Intelligent digital infrastructure powered by AI, Cloud, Automation and Web3.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="solutions.html">Solutions</a>
+          <a href="cloud-service.html">AiBox Cloud</a>
+          <a href="packages.html">Packages</a>
+          <a href="portfolio.html">Portfolio</a>
+        </div>
+        <div>
+          <h4>AiBoxs</h4>
+          <a href="buy-aiboxs.html">Buy with Wallet</a>
+          <a href="https://pump.fun/coin/5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump" target="_blank" rel="noopener noreferrer">Pump.fun</a>
+          <a href="terms.html">Terms &amp; Risk</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© 2026 AiBox Tech Solutions. All rights reserved.</span>
+        <span>Cloud Storage meets Solana&nbsp;&nbsp;|&nbsp;&nbsp;AiBoxs Landing Rev.1 — 30 Sep 2026</span>
+      </div>
+    </footer>
+
+    <div class="toast" id="toast">Copied</div>
+    <script>
+      (() => {
+        "use strict";
+
+        const mint = "5xgXWFdZjRTWeYK2ATz9oQvmBRkUFk6DBuh5Cyg6pump";
+
+        function track(name, target) {
+          const payload = {
+            event: "aibox_cta_click",
+            aibox_event: name,
+            target: target || "",
+            page: "aiboxs_landing",
+            timestamp: new Date().toISOString()
+          };
+
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(payload);
+          window.dispatchEvent(new CustomEvent("aibox:cta", { detail: payload }));
+
+          try {
+            localStorage.setItem("aibox_last_cta", JSON.stringify(payload));
+          } catch (_) {}
+        }
+
+        document.querySelectorAll("[data-track]").forEach((element) => {
+          element.addEventListener("click", () => {
+            track(element.dataset.track, element.href || element.id || element.textContent.trim());
+          });
+        });
+
+        const copyButton = document.getElementById("copyMint");
+        copyButton?.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(mint);
+            const original = copyButton.textContent;
+            copyButton.textContent = "Copied";
+            window.setTimeout(() => (copyButton.textContent = original), 1200);
+          } catch (_) {
+            window.prompt("Copy the official AiBoxs mint:", mint);
+          }
+        });
+      })();
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
