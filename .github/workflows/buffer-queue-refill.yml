@@ -1,0 +1,26 @@
+name: Refill Buffer X Queue
+
+on:
+  schedule:
+    # 08:20 Asia/Bangkok (UTC+7), after the 08:00 Auto Publish slot
+    - cron: "20 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: buffer-queue-refill
+  cancel-in-progress: false
+
+jobs:
+  refill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Maintain the Buffer queue
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: node scripts/buffer-queue-refill.mjs
