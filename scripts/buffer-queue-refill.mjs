@@ -110,12 +110,12 @@ const result = await gql(`
 `);
 
 const scheduled = result.posts.edges.map(edge => edge.node);
-if (scheduled.length >= queueTarget) {
-  console.log(`No action: @${targetHandle} already has ${scheduled.length} scheduled posts.`);
-  process.exit(0);
-}
 if (scheduled.length > queueTarget) {
   throw new Error("Queue is above the configured target; no post was created.");
+}
+if (scheduled.length === queueTarget) {
+  console.log(`No action: @${targetHandle} already has ${scheduled.length} scheduled posts.`);
+  process.exit(0);
 }
 
 function bangkokDateParts(date) {
@@ -169,7 +169,7 @@ while (scheduled.length + created < queueTarget) {
         schedulingType: automatic
         mode: customScheduled
         dueAt: ${JSON.stringify(dueAt)}
-        assets: [{ image: { url: ${JSON.stringify(image.url)} } }]
+        assets: [{ image: { url: ${JSON.stringify(image.url)}, metadata: { altText: ${JSON.stringify(image.alt)} } } }]
       }) {
         ... on PostActionSuccess {
           post { id text dueAt channelId status assets { id mimeType } }
